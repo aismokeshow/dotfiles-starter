@@ -1,0 +1,17 @@
+# Secrets and credentials
+*.secrets
+.env.secrets
+.env.local
+*.key
+*.pem
+*.token
+
+# User-generated state (never ship)
+zoxide-dirs.txt
+env.public.bak
+Brewfile
+atuin/
+mise/
+
+# macOS
+.DS_Store
