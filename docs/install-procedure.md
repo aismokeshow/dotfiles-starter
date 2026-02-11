@@ -32,7 +32,16 @@ xcode-select -p 2>/dev/null
 
 If this fails, tell the user:
 
-> Xcode Command Line Tools are required. Run `xcode-select --install`, complete the GUI dialog, then say "done".
+> **One thing first.** Your Mac needs Apple's developer tools installed (don't worry — it's just a standard system component, not the full Xcode app).
+>
+> 1. Copy and paste this into your terminal, then hit Enter:
+>
+> ```
+> xcode-select --install
+> ```
+>
+> 2. A popup will appear — click **"Install"** and wait for it to finish
+> 3. Come back here and say **"done"**
 
 **Wait for user confirmation before continuing.**
 
@@ -47,17 +56,26 @@ Check if already installed:
 /opt/homebrew/bin/brew --version 2>/dev/null || /usr/local/bin/brew --version 2>/dev/null || echo "missing"
 ```
 
-If missing, tell the user:
+If missing, tell the user exactly this (copy-paste friendly, beginner-safe):
 
-> Homebrew is required but not installed. It needs sudo access, so I can't install it for you. Please run this command in a separate terminal:
+> **One quick thing I need your help with.** Homebrew (the macOS package manager) needs your password to install, and I can't type passwords for you. This is the only manual step in the whole process.
+>
+> **Here's what to do:**
+>
+> 1. Open a new Terminal window (⌘ + Space, type "Terminal", hit Enter)
+> 2. Copy and paste this entire line, then hit Enter:
 >
 > ```
 > /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 > ```
 >
-> After it finishes, say "done" and I'll continue.
+> 3. Type your Mac password when asked (you won't see it as you type — that's normal)
+> 4. Wait for it to finish (1-3 minutes)
+> 5. Come back here and say **"done"**
+>
+> That's it — I'll handle everything else from there.
 
-**Wait for user confirmation before continuing.**
+**Wait for user confirmation before continuing.** Do not proceed on silence or ambiguous responses. Only continue when the user explicitly confirms Homebrew is installed.
 
 After Homebrew is confirmed, ensure it's in PATH:
 
