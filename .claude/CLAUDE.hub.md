@@ -16,8 +16,7 @@ dotfiles-starter/
 │   ├── starship.toml                      ← Prompt config (symlinked to ~/.config/)
 │   └── sheldon/plugins.toml               ← Plugin manager config (symlinked to ~/.config/sheldon/)
 ├── docs/
-│   ├── install-procedure.md               ← 17-step atomic install manifest
-│   └── cross-project-awareness.md         ← Sibling starter detection and preservation
+│   └── install-procedure.md               ← 16-step atomic install manifest
 ├── .claude/
 │   ├── CLAUDE.hub.md                      ← THIS FILE — operational reference
 │   ├── agents/
@@ -30,11 +29,11 @@ dotfiles-starter/
 └── ALIAS-CHANGES.md                       ← Migration changelog
 ```
 
-**Agents:** The `install-dotfiles` agent reads `docs/install-procedure.md` at runtime and uses both skills to execute the install. It does not contain inlined procedures — it orchestrates.
+**Agents:** The `install-dotfiles` agent reads `docs/install-procedure.md` at runtime and uses the safe-merge-config skill to execute the install. It does not contain inlined procedures — it orchestrates.
 
 **Skills:**
-- `ensure-tool-installed` — handles one tool at a time: check → Zerobrew → Homebrew fallback → verify
 - `safe-merge-config` — three modes: SYMLINK (replace file with symlink), ENSURE-LINES (append missing lines), WRITE-IF-MISSING (create only if absent). Always backs up, never silently discards content.
+- `ensure-tool-installed` — available for `/customize` flows: check if installed → install via Homebrew → verify.
 
 ## Symlink Architecture
 
@@ -67,14 +66,6 @@ Modules loaded by `.zshrc`:
 - After adding aliases or functions: restart shell or `source ~/.zshrc`
 - Do not install Oh My Zsh — this config intentionally replaces it
 
-## Companion Starters
-
-Other aismokeshow starters may be installed alongside this one. See `docs/cross-project-awareness.md` for detection rules, artifact preservation, and integration details.
-
-Key interactions:
-- **aerospace-starter** — adds `boom` alias to .zshrc for AeroSpace reload
-- **statusline-starter** — runs independently via `~/.claude/settings.json`, no shell config interaction
-
 ---
 
 ## First-Time Setup
@@ -83,7 +74,7 @@ Triggered by: `/install`
 
 If `~/.zshrc` is already a symlink to this repo and tools are installed, tell the user everything is configured and offer to run `checkhealth`.
 
-Otherwise, the `install-dotfiles` agent handles the full setup. It reads `docs/install-procedure.md` and executes all 17 steps, using the `ensure-tool-installed` and `safe-merge-config` skills for tool installation and config file changes.
+Otherwise, the `install-dotfiles` agent handles the full setup. It reads `docs/install-procedure.md` and executes all 16 steps, using the `ensure-tool-installed` and `safe-merge-config` skills for tool installation and config file changes.
 
 ## Uninstall
 

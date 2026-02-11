@@ -230,35 +230,48 @@ Skip any tool that is not installed.
 mkdir -p "$HOME/.config/zsh/completions"
 ```
 
-## Step 11: Cross-Project Check
+## Step 11: Migrate Custom Config and Symlink .zshrc
 
-**Precondition:** Steps 5-9 completed.
-**Goal:** Detect and handle interactions with other aismokeshow starters.
-
-Read `docs/cross-project-awareness.md` and follow its instructions before modifying any shell config files in Steps 12-13.
-
-## Step 12: Symlink .zshrc
-
-**Precondition:** Step 11 completed.
-**Goal:** Point `~/.zshrc` at the modular config in this repo.
+**Precondition:** Step 10 completed.
+**Goal:** Preserve any custom shell configuration, then replace `~/.zshrc` with a symlink to this repo's modular config.
 
 > **DESTRUCTIVE BOUNDARY** — This replaces the user's shell configuration.
-> Tell the user: "I'm about to replace your `~/.zshrc` with a symlink to this starter's modular config. Your existing `.zshrc` will be backed up. Proceed?"
+> Tell the user: "I'm about to replace your `~/.zshrc` with a symlink to this starter's modular config. Your existing `.zshrc` will be backed up, and I'll automatically preserve any custom aliases, functions, exports, or PATH entries I find in it. Proceed?"
 > **Wait for explicit confirmation.**
+
+### Step 11a: Extract custom content from existing .zshrc
+
+Read `~/.zshrc`. If it exists and is not empty, compare its contents against `zsh/.zshrc` (the new config). Identify any lines that are custom — aliases, functions, export statements, PATH additions, or source commands that are NOT part of the new modular config.
+
+For each custom line found, automatically append it to the appropriate modular file:
+
+| Content type | Destination |
+|---|---|
+| `alias ...` | `zsh/aliases.zsh` |
+| `export ...` (non-PATH) | `zsh/exports.zsh` |
+| `export PATH=...` or PATH modifications | `zsh/paths.zsh` |
+| Function definitions | `zsh/functions.zsh` |
+| `source ...` or `. ...` commands | `zsh/exports.zsh` (with a comment noting the source) |
+
+Tell the user what was migrated: "I found X custom lines in your existing .zshrc and moved them into the modular config files. Nothing was lost."
+
+If nothing custom is found, skip this substep silently.
+
+### Step 11b: Backup and symlink
 
 Use the **safe-merge-config** skill with:
 - **Target file:** `~/.zshrc`
 - **Source:** `$(pwd)/zsh/.zshrc`
-- **Strategy:** symlink (not merge) — the .zshrc is a complete replacement
+- **Strategy:** symlink
 - **Backup pattern:** `~/.zshrc.pre-dotfiles.YYYYMMDD-HHMMSS`
 
 After symlinking, inform the user:
 
 > `~/.zshrc` is now a symlink to this folder. **Do not move or delete this folder** — your shell config lives here permanently.
 
-## Step 13: Write .zprofile
+## Step 12: Write .zprofile
 
-**Precondition:** Step 12 completed.
+**Precondition:** Step 11 completed.
 **Goal:** Ensure `~/.zprofile` sets up PATH for Homebrew and OrbStack.
 
 Use the **safe-merge-config** skill with:
@@ -282,9 +295,9 @@ source ~/.orbstack/shell/init.zsh 2>/dev/null || true
 - **Detect existing:** check for `"Zerobrew PATH setup"` marker string
 - **Backup pattern:** `~/.zprofile.pre-dotfiles.YYYYMMDD-HHMMSS`
 
-## Step 14: Verify Default Shell
+## Step 13: Verify Default Shell
 
-**Precondition:** Step 13 completed.
+**Precondition:** Step 12 completed.
 **Goal:** Ensure the user's login shell is zsh.
 
 ```bash
@@ -297,7 +310,7 @@ If the output does not end in `/zsh`, tell the user:
 
 This is informational only — do not run `chsh` automatically.
 
-## Step 15: Validate Installation
+## Step 14: Validate Installation
 
 **Precondition:** All previous steps completed.
 **Goal:** Confirm all tools are available.
@@ -330,9 +343,9 @@ source ~/.zshrc
 checkhealth
 ```
 
-## Step 16: Switch to Operational Mode
+## Step 15: Switch to Operational Mode
 
-**Precondition:** Step 15 passed (or user acknowledged missing tools).
+**Precondition:** Step 14 passed (or user acknowledged missing tools).
 **Goal:** Replace the install-phase CLAUDE.md with the operational hub version.
 
 ```bash
@@ -341,9 +354,9 @@ cp .claude/CLAUDE.hub.md CLAUDE.md
 
 Tell the user: "CLAUDE.md has been switched to operational mode. Future Claude Code sessions in this folder will see the hub instructions instead of the install flow."
 
-## Step 17: Optional Cleanup
+## Step 16: Optional Cleanup
 
-**Precondition:** Step 16 completed.
+**Precondition:** Step 15 completed.
 **Goal:** Remove packaging artifacts if the user wants a clean install.
 
 > **DESTRUCTIVE BOUNDARY** — This removes git history and the ability to pull updates.
