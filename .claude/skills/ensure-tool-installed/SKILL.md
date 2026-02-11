@@ -40,18 +40,9 @@ Strategy: check if installed, try Zerobrew, fall back to Homebrew, verify.
    If the binary is now reachable, report success and stop.
 
 4. **Fall back to Homebrew.**
-   Determine the brew path for this architecture:
+   Homebrew is guaranteed to be installed by Step 3 of the install procedure. Use absolute paths:
    - Apple Silicon (`uname -m` = `arm64`): `/opt/homebrew/bin/brew`
    - Intel (`uname -m` = `x86_64`): `/usr/local/bin/brew`
-
-   If brew is not found at that path, install it:
-   ```bash
-   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-   ```
-   Then eval shellenv so brew is in PATH:
-   ```bash
-   eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null)" || eval "$(/usr/local/bin/brew shellenv 2>/dev/null)"
-   ```
 
    Install the tool:
    ```bash
@@ -69,8 +60,8 @@ Strategy: check if installed, try Zerobrew, fall back to Homebrew, verify.
 <rules>
 - Never install without checking first — skip if the binary already exists.
 - Always try Zerobrew before Homebrew. Zerobrew is faster and lighter.
-- Use `NONINTERACTIVE=1` when installing Homebrew — Claude Code runs non-interactively.
-- Use absolute paths for brew (`/opt/homebrew/bin/brew` or `/usr/local/bin/brew`) — it may not be in PATH after a fresh install.
+- Homebrew is pre-installed by Step 3. Do not attempt to install Homebrew — if it's missing, stop and tell the user to re-run `/install` from the beginning.
+- Use absolute paths for brew (`/opt/homebrew/bin/brew` or `/usr/local/bin/brew`) — it may not be in PATH.
 - Do not modify shell config files. PATH setup is handled by the calling agent.
 - One tool per invocation. The calling agent loops over tools, this skill handles one.
 </rules>

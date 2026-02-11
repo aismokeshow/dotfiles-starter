@@ -36,10 +36,39 @@ If this fails, tell the user:
 
 **Wait for user confirmation before continuing.**
 
-## Step 3: Install Zerobrew
+## Step 3: Install Homebrew
 
 **Precondition:** Step 2 passed.
-**Goal:** Install Zerobrew as the primary CLI package installer.
+**Goal:** Ensure Homebrew is available. Homebrew requires sudo, which Claude Code cannot provide — the user must install it themselves if it's not already present.
+
+Check if already installed:
+
+```bash
+/opt/homebrew/bin/brew --version 2>/dev/null || /usr/local/bin/brew --version 2>/dev/null || echo "missing"
+```
+
+If missing, tell the user:
+
+> Homebrew is required but not installed. It needs sudo access, so I can't install it for you. Please run this command in a separate terminal:
+>
+> ```
+> /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+> ```
+>
+> After it finishes, say "done" and I'll continue.
+
+**Wait for user confirmation before continuing.**
+
+After Homebrew is confirmed, ensure it's in PATH:
+
+```bash
+eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null)" || eval "$(/usr/local/bin/brew shellenv 2>/dev/null)"
+```
+
+## Step 4: Install Zerobrew
+
+**Precondition:** Step 3 completed.
+**Goal:** Install Zerobrew as a faster alternative to Homebrew for CLI tools.
 
 Check if already installed:
 
@@ -54,11 +83,17 @@ curl -sSL https://raw.githubusercontent.com/lucasgelfond/zerobrew/main/install.s
 export PATH="$HOME/.local/bin:/opt/zerobrew/bin:/opt/zerobrew/prefix/bin:$PATH"
 ```
 
-**Verification:** `command -v zb` succeeds. If it fails, warn the user that Zerobrew could not be installed — Homebrew will be used as the sole fallback. Continue either way.
+**Verification:** Run `zb --version 2>&1`. If it fails with a library error (e.g., `liblzma` not found), install the dependency:
 
-## Step 4: Install Brewfile (if present)
+```bash
+brew install xz
+```
 
-**Precondition:** Step 3 completed.
+Then verify again. If `zb` still fails, warn the user that Zerobrew is not working — Homebrew will be used as the sole fallback. Continue either way.
+
+## Step 5: Install Brewfile (if present)
+
+**Precondition:** Step 3 completed (Homebrew available).
 **Goal:** Install user-provided Brewfile packages.
 
 Check for a Brewfile in the starter directory:
@@ -75,7 +110,7 @@ brew bundle install --file=Brewfile --no-lock
 
 If Brewfile is not found, skip this step entirely.
 
-## Step 5: Install CLI Tool Stack
+## Step 6: Install CLI Tool Stack
 
 **Precondition:** Step 3 completed.
 **Goal:** Install all 12 modern CLI tools.
@@ -99,9 +134,9 @@ For each tool, use the **ensure-tool-installed** skill with the binary and packa
 
 Track any failures. After all 12 are attempted, report results to the user. If any failed, list them and note they can be installed manually later with `zb install <pkg>` or `brew install <pkg>`.
 
-## Step 6: Configure Sheldon (Plugin Manager)
+## Step 7: Configure Sheldon (Plugin Manager)
 
-**Precondition:** Step 5 completed.
+**Precondition:** Step 6 completed.
 **Goal:** Symlink the Sheldon config and download plugins.
 
 ```bash
@@ -119,9 +154,9 @@ If `sheldon lock` fails, warn: "Plugins will download on first shell start."
 
 **Verification:** `~/.config/sheldon/plugins.toml` exists and is a symlink.
 
-## Step 7: Configure Starship Prompt
+## Step 8: Configure Starship Prompt
 
-**Precondition:** Step 5 completed.
+**Precondition:** Step 6 completed.
 **Goal:** Symlink the Starship config.
 
 ```bash
@@ -131,9 +166,9 @@ ln -sf "$(pwd)/zsh/starship.toml" "$HOME/.config/starship.toml"
 
 **Verification:** `~/.config/starship.toml` exists and is a symlink.
 
-## Step 8: Configure mise (Runtime Version Manager)
+## Step 9: Configure mise (Runtime Version Manager)
 
-**Precondition:** Step 5 completed.
+**Precondition:** Step 6 completed.
 **Goal:** Create a default mise config and install runtimes.
 
 ```bash
@@ -159,9 +194,9 @@ mise install 2>&1
 
 This may take several minutes. If it fails, warn: "Run `mise install` manually after shell restart."
 
-## Step 9: Cache Shell Init Scripts
+## Step 10: Cache Shell Init Scripts
 
-**Precondition:** Steps 5-8 completed.
+**Precondition:** Steps 6-8 completed.
 **Goal:** Pre-cache init scripts so .zshrc loads from cache instead of running `eval` on every startup.
 
 ```bash
@@ -182,7 +217,7 @@ Skip any tool that is not installed.
 
 **Verification:** `ls ~/.cache/zsh/` shows `.zsh` files for each installed tool.
 
-## Step 10: Set Up Completions Directory
+## Step 11: Set Up Completions Directory
 
 **Precondition:** None.
 **Goal:** Ensure the custom completions directory exists.
@@ -191,16 +226,16 @@ Skip any tool that is not installed.
 mkdir -p "$HOME/.config/zsh/completions"
 ```
 
-## Step 11: Cross-Project Check
+## Step 12: Cross-Project Check
 
-**Precondition:** Steps 5-10 completed.
+**Precondition:** Steps 6-10 completed.
 **Goal:** Detect and handle interactions with other aismokeshow starters.
 
-Read `docs/cross-project-awareness.md` and follow its instructions before modifying any shell config files in Steps 12-13.
+Read `docs/cross-project-awareness.md` and follow its instructions before modifying any shell config files in Steps 13-14.
 
-## Step 12: Symlink .zshrc
+## Step 13: Symlink .zshrc
 
-**Precondition:** Step 11 completed.
+**Precondition:** Step 12 completed.
 **Goal:** Point `~/.zshrc` at the modular config in this repo.
 
 > **DESTRUCTIVE BOUNDARY** — This replaces the user's shell configuration.
@@ -217,9 +252,9 @@ After symlinking, inform the user:
 
 > `~/.zshrc` is now a symlink to this folder. **Do not move or delete this folder** — your shell config lives here permanently.
 
-## Step 13: Write .zprofile
+## Step 14: Write .zprofile
 
-**Precondition:** Step 11 completed.
+**Precondition:** Step 13 completed.
 **Goal:** Ensure `~/.zprofile` sets up PATH for Zerobrew, Homebrew, and OrbStack.
 
 Use the **safe-merge-config** skill with:
@@ -243,9 +278,9 @@ source ~/.orbstack/shell/init.zsh 2>/dev/null || true
 - **Detect existing:** check for `"Zerobrew PATH setup"` marker string
 - **Backup pattern:** `~/.zprofile.pre-dotfiles.YYYYMMDD-HHMMSS`
 
-## Step 14: Verify Default Shell
+## Step 15: Verify Default Shell
 
-**Precondition:** Step 12 completed.
+**Precondition:** Step 14 completed.
 **Goal:** Ensure the user's login shell is zsh.
 
 ```bash
@@ -258,7 +293,7 @@ If the output does not end in `/zsh`, tell the user:
 
 This is informational only — do not run `chsh` automatically.
 
-## Step 15: Validate Installation
+## Step 16: Validate Installation
 
 **Precondition:** All previous steps completed.
 **Goal:** Confirm all tools are available.
@@ -291,9 +326,9 @@ source ~/.zshrc
 checkhealth
 ```
 
-## Step 16: Switch to Operational Mode
+## Step 17: Switch to Operational Mode
 
-**Precondition:** Step 15 passed (or user acknowledged missing tools).
+**Precondition:** Step 16 passed (or user acknowledged missing tools).
 **Goal:** Replace the install-phase CLAUDE.md with the operational hub version.
 
 ```bash
@@ -302,9 +337,9 @@ cp .claude/CLAUDE.hub.md CLAUDE.md
 
 Tell the user: "CLAUDE.md has been switched to operational mode. Future Claude Code sessions in this folder will see the hub instructions instead of the install flow."
 
-## Step 17: Optional Cleanup
+## Step 18: Optional Cleanup
 
-**Precondition:** Step 16 completed.
+**Precondition:** Step 17 completed.
 **Goal:** Remove packaging artifacts if the user wants a clean install.
 
 > **DESTRUCTIVE BOUNDARY** — This removes git history and the ability to pull updates.

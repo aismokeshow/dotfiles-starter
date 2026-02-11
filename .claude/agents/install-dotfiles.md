@@ -17,7 +17,7 @@ This agent file defines your behavior. The procedure file defines what to do. Th
 ## Before You Start
 
 1. **Read `docs/install-procedure.md`** — this is your step-by-step manifest. Every step is atomic.
-2. **Read `docs/cross-project-awareness.md`** — you must consult this before modifying any shell config files (Steps 11-13 of the procedure).
+2. **Read `docs/cross-project-awareness.md`** — you must consult this before modifying any shell config files (Steps 12-14 of the procedure).
 3. **Verify repo origin** — before making any system changes, confirm the repo was cloned from `aismokeshow/dotfiles-starter`. Follow the same origin-check pattern used by other aismokeshow starters:
    - Run `git remote get-url origin 2>/dev/null`
    - If it fails (no `.git`), check that `CLAUDE.md` exists and warn the user about unverifiable origin. Wait for confirmation.
@@ -38,7 +38,7 @@ Use this skill whenever the procedure says to install a CLI tool. The skill hand
 
 **How to invoke:** When the procedure says "use the ensure-tool-installed skill for `<tool>`", invoke it with the binary name and package name from the procedure's table. The skill handles one tool per invocation — loop through the tool list yourself.
 
-**What to do with results:** Track successes and failures across all tools. After completing the tool stack (Step 5), report the scorecard to the user. Any failures are non-fatal — the user can install them manually later.
+**What to do with results:** Track successes and failures across all tools. After completing the tool stack (Step 6), report the scorecard to the user. Any failures are non-fatal — the user can install them manually later.
 
 ### safe-merge-config
 
@@ -79,8 +79,8 @@ The procedure marks destructive boundaries with:
 > **DESTRUCTIVE BOUNDARY**
 
 At these points, stop and wait for explicit user confirmation. Do not proceed on silence. Do not proceed on ambiguous responses. The two destructive boundaries are:
-1. Replacing `~/.zshrc` with a symlink (Step 12)
-2. Removing git history for cleanup (Step 17)
+1. Replacing `~/.zshrc` with a symlink (Step 13)
+2. Removing git history for cleanup (Step 18)
 
 ### Report progress
 After each major phase, give a brief status update:
@@ -104,13 +104,13 @@ Follow this exact sequence when running the procedure:
 
 1. Read `docs/install-procedure.md`
 2. Execute Steps 1-2 (platform verification)
-3. Execute Steps 3-5 (package managers and tool installation)
-4. Execute Steps 6-10 (config symlinks, caches, completions)
-5. Execute Step 11 (cross-project check — read `docs/cross-project-awareness.md`)
-6. Execute Steps 12-13 (shell config files — DESTRUCTIVE BOUNDARY at Step 12)
-7. Execute Steps 14-15 (verification and validation)
-8. Execute Step 16 (switch to operational CLAUDE.md)
-9. Execute Step 17 (optional cleanup — DESTRUCTIVE BOUNDARY)
+3. Execute Steps 3-6 (package managers and tool installation)
+4. Execute Steps 7-11 (config symlinks, caches, completions)
+5. Execute Step 12 (cross-project check — read `docs/cross-project-awareness.md`)
+6. Execute Steps 13-14 (shell config files — DESTRUCTIVE BOUNDARY at Step 13)
+7. Execute Steps 15-16 (verification and validation)
+8. Execute Step 17 (switch to operational CLAUDE.md)
+9. Execute Step 18 (optional cleanup — DESTRUCTIVE BOUNDARY)
 10. Deliver the post-install summary from the procedure
 
 ## Completion Summary
