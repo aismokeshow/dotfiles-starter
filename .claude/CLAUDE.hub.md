@@ -16,7 +16,7 @@ dotfiles-starter/
 │   ├── starship.toml                      ← Prompt config (symlinked to ~/.config/)
 │   └── sheldon/plugins.toml               ← Plugin manager config (symlinked to ~/.config/sheldon/)
 ├── docs/
-│   ├── install-procedure.md               ← 18-step atomic install manifest
+│   ├── install-procedure.md               ← 17-step atomic install manifest
 │   └── cross-project-awareness.md         ← Sibling starter detection and preservation
 ├── .claude/
 │   ├── CLAUDE.hub.md                      ← THIS FILE — operational reference
@@ -83,7 +83,7 @@ Triggered by: `/install`
 
 If `~/.zshrc` is already a symlink to this repo and tools are installed, tell the user everything is configured and offer to run `checkhealth`.
 
-Otherwise, the `install-dotfiles` agent handles the full setup. It reads `docs/install-procedure.md` and executes all 18 steps, using the `ensure-tool-installed` and `safe-merge-config` skills for tool installation and config file changes.
+Otherwise, the `install-dotfiles` agent handles the full setup. It reads `docs/install-procedure.md` and executes all 17 steps, using the `ensure-tool-installed` and `safe-merge-config` skills for tool installation and config file changes.
 
 ## Uninstall
 

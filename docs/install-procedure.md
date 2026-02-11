@@ -85,32 +85,7 @@ After Homebrew is confirmed, verify it's reachable:
 
 **Important:** Claude Code's Bash tool does not persist shell state between commands. `eval "$(brew shellenv)"` only affects the current command. For all subsequent `brew` commands in this procedure, **always use the absolute path**: `/opt/homebrew/bin/brew` (Apple Silicon) or `/usr/local/bin/brew` (Intel).
 
-## Step 4: Download Zerobrew
-
-**Precondition:** Step 3 completed.
-**Goal:** Download the Zerobrew binary for future use. Zerobrew installs CLI tools 2-20x faster than Homebrew, but its initialization (`zb init`) requires sudo, which Claude Code cannot provide. We download it now and set it up as a post-install manual step.
-
-Check if already downloaded:
-
-```bash
-test -f "$HOME/.local/bin/zb" && echo "downloaded" || echo "missing"
-```
-
-If missing, download:
-
-```bash
-curl -sSL https://raw.githubusercontent.com/lucasgelfond/zerobrew/main/install.sh | bash
-```
-
-If `zb` was downloaded but fails with a library error (e.g., `liblzma` not found), fix it:
-
-```bash
-/opt/homebrew/bin/brew install xz
-```
-
-**Do NOT run `zb init` or `zb install` during this procedure.** Both require sudo. Zerobrew setup is a post-install manual step (see Post-Install section). All tool installation in Step 6 uses Homebrew directly.
-
-## Step 5: Install Brewfile (if present)
+## Step 4: Install Brewfile (if present)
 
 **Precondition:** Step 3 completed (Homebrew available).
 **Goal:** Install user-provided Brewfile packages.
@@ -129,7 +104,7 @@ If found, run:
 
 If Brewfile is not found, skip this step entirely.
 
-## Step 6: Install CLI Tool Stack
+## Step 5: Install CLI Tool Stack
 
 **Precondition:** Step 3 completed (Homebrew available).
 **Goal:** Install all 12 modern CLI tools via Homebrew.
@@ -163,9 +138,9 @@ Check with: `export PATH="/opt/homebrew/bin:$PATH" && command -v <binary>` for e
 
 Report results to the user. If any failed, list them and note they can be installed manually later with `brew install <pkg>`.
 
-## Step 7: Configure Sheldon (Plugin Manager)
+## Step 6: Configure Sheldon (Plugin Manager)
 
-**Precondition:** Step 6 completed.
+**Precondition:** Step 5 completed.
 **Goal:** Symlink the Sheldon config and download plugins.
 
 ```bash
@@ -183,9 +158,9 @@ If `sheldon lock` fails, warn: "Plugins will download on first shell start."
 
 **Verification:** `~/.config/sheldon/plugins.toml` exists and is a symlink.
 
-## Step 8: Configure Starship Prompt
+## Step 7: Configure Starship Prompt
 
-**Precondition:** Step 6 completed.
+**Precondition:** Step 5 completed.
 **Goal:** Symlink the Starship config.
 
 ```bash
@@ -195,9 +170,9 @@ ln -sf "$(pwd)/zsh/starship.toml" "$HOME/.config/starship.toml"
 
 **Verification:** `~/.config/starship.toml` exists and is a symlink.
 
-## Step 9: Configure mise (Runtime Version Manager)
+## Step 8: Configure mise (Runtime Version Manager)
 
-**Precondition:** Step 6 completed.
+**Precondition:** Step 5 completed.
 **Goal:** Create a default mise config and install runtimes.
 
 ```bash
@@ -223,9 +198,9 @@ mise install 2>&1
 
 This may take several minutes. If it fails, warn: "Run `mise install` manually after shell restart."
 
-## Step 10: Cache Shell Init Scripts
+## Step 9: Cache Shell Init Scripts
 
-**Precondition:** Steps 6-8 completed.
+**Precondition:** Steps 5-7 completed.
 **Goal:** Pre-cache init scripts so .zshrc loads from cache instead of running `eval` on every startup.
 
 ```bash
@@ -246,7 +221,7 @@ Skip any tool that is not installed.
 
 **Verification:** `ls ~/.cache/zsh/` shows `.zsh` files for each installed tool.
 
-## Step 11: Set Up Completions Directory
+## Step 10: Set Up Completions Directory
 
 **Precondition:** None.
 **Goal:** Ensure the custom completions directory exists.
@@ -255,16 +230,16 @@ Skip any tool that is not installed.
 mkdir -p "$HOME/.config/zsh/completions"
 ```
 
-## Step 12: Cross-Project Check
+## Step 11: Cross-Project Check
 
-**Precondition:** Steps 6-10 completed.
+**Precondition:** Steps 5-9 completed.
 **Goal:** Detect and handle interactions with other aismokeshow starters.
 
-Read `docs/cross-project-awareness.md` and follow its instructions before modifying any shell config files in Steps 13-14.
+Read `docs/cross-project-awareness.md` and follow its instructions before modifying any shell config files in Steps 12-13.
 
-## Step 13: Symlink .zshrc
+## Step 12: Symlink .zshrc
 
-**Precondition:** Step 12 completed.
+**Precondition:** Step 11 completed.
 **Goal:** Point `~/.zshrc` at the modular config in this repo.
 
 > **DESTRUCTIVE BOUNDARY** — This replaces the user's shell configuration.
@@ -281,10 +256,10 @@ After symlinking, inform the user:
 
 > `~/.zshrc` is now a symlink to this folder. **Do not move or delete this folder** — your shell config lives here permanently.
 
-## Step 14: Write .zprofile
+## Step 13: Write .zprofile
 
-**Precondition:** Step 13 completed.
-**Goal:** Ensure `~/.zprofile` sets up PATH for Zerobrew, Homebrew, and OrbStack.
+**Precondition:** Step 12 completed.
+**Goal:** Ensure `~/.zprofile` sets up PATH for Homebrew and OrbStack.
 
 Use the **safe-merge-config** skill with:
 - **Target file:** `~/.zprofile`
@@ -307,9 +282,9 @@ source ~/.orbstack/shell/init.zsh 2>/dev/null || true
 - **Detect existing:** check for `"Zerobrew PATH setup"` marker string
 - **Backup pattern:** `~/.zprofile.pre-dotfiles.YYYYMMDD-HHMMSS`
 
-## Step 15: Verify Default Shell
+## Step 14: Verify Default Shell
 
-**Precondition:** Step 14 completed.
+**Precondition:** Step 13 completed.
 **Goal:** Ensure the user's login shell is zsh.
 
 ```bash
@@ -322,7 +297,7 @@ If the output does not end in `/zsh`, tell the user:
 
 This is informational only — do not run `chsh` automatically.
 
-## Step 16: Validate Installation
+## Step 15: Validate Installation
 
 **Precondition:** All previous steps completed.
 **Goal:** Confirm all tools are available.
@@ -346,7 +321,7 @@ Check each binary:
 
 For each, run `command -v <binary>`. Report OK or MISSING.
 
-If any are missing, tell the user: "X tools not found. Run `zb install <pkg>` or `brew install <pkg>` to install them manually."
+If any are missing, tell the user: "X tools not found. Run `brew install <pkg>` to install them manually."
 
 Then source the new config and run the health check:
 
@@ -355,9 +330,9 @@ source ~/.zshrc
 checkhealth
 ```
 
-## Step 17: Switch to Operational Mode
+## Step 16: Switch to Operational Mode
 
-**Precondition:** Step 16 passed (or user acknowledged missing tools).
+**Precondition:** Step 15 passed (or user acknowledged missing tools).
 **Goal:** Replace the install-phase CLAUDE.md with the operational hub version.
 
 ```bash
@@ -366,9 +341,9 @@ cp .claude/CLAUDE.hub.md CLAUDE.md
 
 Tell the user: "CLAUDE.md has been switched to operational mode. Future Claude Code sessions in this folder will see the hub instructions instead of the install flow."
 
-## Step 18: Optional Cleanup
+## Step 17: Optional Cleanup
 
-**Precondition:** Step 17 completed.
+**Precondition:** Step 16 completed.
 **Goal:** Remove packaging artifacts if the user wants a clean install.
 
 > **DESTRUCTIVE BOUNDARY** — This removes git history and the ability to pull updates.
@@ -399,7 +374,6 @@ MIT — [aismokeshow](https://www.aismokeshow.com/) · [dotfiles-starter](https:
 After all steps, summarize what happened:
 
 - `~/.zshrc` is a symlink to this folder — do not move or delete it
-- `zb` installs CLI tools fast (homebrew-core packages). `brew` still works for casks, taps, and services
 - Modern replacements are active: `ls` -> eza, `cat` -> bat, `grep` -> ripgrep, `find` -> fd, `cd` -> zoxide
 - Run `checkhealth` anytime to verify the stack
 - Run `regen-cache` after upgrading cached tools
@@ -407,7 +381,12 @@ After all steps, summarize what happened:
 
 **Manual steps the user should do themselves:**
 
-1. **Set up Zerobrew** (recommended) — run `zb init` in your terminal (needs your password, one-time). After that, `zb install <pkg>` installs CLI tools 2-20x faster than `brew install`
+1. **Optional: Set up Zerobrew for faster future installs** — run these two commands in your terminal (needs your password, one-time):
+   ```
+   curl -sSL https://raw.githubusercontent.com/lucasgelfond/zerobrew/main/install.sh | bash
+   zb init
+   ```
+   After that, `zb install <pkg>` installs CLI tools 2-20x faster than `brew install`. Completely optional — `brew` works fine on its own.
 2. `atuin register` or `atuin login` — encrypted shell history sync (optional)
 3. `git config --global user.name "..."` and `git config --global user.email "..."` — if not already set
 4. SSH keys — copy from old machine or generate new
