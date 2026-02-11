@@ -38,7 +38,9 @@ Use this skill whenever the procedure says to install a CLI tool. The skill hand
 
 **How to invoke:** When the procedure says "use the ensure-tool-installed skill for `<tool>`", invoke it with the binary name and package name from the procedure's table. The skill handles one tool per invocation — loop through the tool list yourself.
 
-**What to do with results:** Track successes and failures across all tools. After completing the tool stack (Step 6), report the scorecard to the user. Any failures are non-fatal — the user can install them manually later.
+**What to do with results:** Track successes and failures. Any failures are non-fatal — the user can install them manually later.
+
+**Note:** Step 6 (CLI tool stack) installs all 12 tools via a single `brew install` command — it does NOT use the ensure-tool-installed skill. The skill is available for individual tool installs if needed later.
 
 ### safe-merge-config
 

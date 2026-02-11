@@ -85,37 +85,30 @@ After Homebrew is confirmed, verify it's reachable:
 
 **Important:** Claude Code's Bash tool does not persist shell state between commands. `eval "$(brew shellenv)"` only affects the current command. For all subsequent `brew` commands in this procedure, **always use the absolute path**: `/opt/homebrew/bin/brew` (Apple Silicon) or `/usr/local/bin/brew` (Intel).
 
-## Step 4: Install Zerobrew
+## Step 4: Download Zerobrew
 
 **Precondition:** Step 3 completed.
-**Goal:** Install Zerobrew as a faster alternative to Homebrew for CLI tools.
+**Goal:** Download the Zerobrew binary for future use. Zerobrew installs CLI tools 2-20x faster than Homebrew, but its initialization (`zb init`) requires sudo, which Claude Code cannot provide. We download it now and set it up as a post-install manual step.
 
-Check if already installed:
+Check if already downloaded:
 
 ```bash
-command -v zb &>/dev/null && echo "installed" || echo "missing"
+test -f "$HOME/.local/bin/zb" && echo "downloaded" || echo "missing"
 ```
 
-If missing, install:
+If missing, download:
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/lucasgelfond/zerobrew/main/install.sh | bash
-export PATH="$HOME/.local/bin:/opt/zerobrew/bin:/opt/zerobrew/prefix/bin:$PATH"
 ```
 
-**Initialize Zerobrew** (required before first use):
-
-```bash
-zb init
-```
-
-**Verification:** Run `zb --version 2>&1`. If it fails with a library error (e.g., `liblzma` not found), install the dependency:
+If `zb` was downloaded but fails with a library error (e.g., `liblzma` not found), fix it:
 
 ```bash
 /opt/homebrew/bin/brew install xz
 ```
 
-Then verify `zb --version` again. If `zb` still fails, warn the user that Zerobrew is not working — Homebrew will be used as the sole fallback. Continue either way.
+**Do NOT run `zb init` or `zb install` during this procedure.** Both require sudo. Zerobrew setup is a post-install manual step (see Post-Install section). All tool installation in Step 6 uses Homebrew directly.
 
 ## Step 5: Install Brewfile (if present)
 
@@ -138,27 +131,37 @@ If Brewfile is not found, skip this step entirely.
 
 ## Step 6: Install CLI Tool Stack
 
-**Precondition:** Step 3 completed.
-**Goal:** Install all 12 modern CLI tools.
+**Precondition:** Step 3 completed (Homebrew available).
+**Goal:** Install all 12 modern CLI tools via Homebrew.
 
-| Tool | Binary | Package Name |
-|------|--------|-------------|
-| Starship | `starship` | `starship` |
-| Sheldon | `sheldon` | `sheldon` |
-| fzf | `fzf` | `fzf` |
-| zoxide | `zoxide` | `zoxide` |
-| eza | `eza` | `eza` |
-| bat | `bat` | `bat` |
-| ripgrep | `rg` | `ripgrep` |
-| fd | `fd` | `fd` |
-| Atuin | `atuin` | `atuin` |
-| mise | `mise` | `mise` |
-| delta | `delta` | `git-delta` |
-| uv | `uv` | `uv` |
+Install all tools in a single command:
 
-For each tool, use the **ensure-tool-installed** skill with the binary and package name from this table. The skill handles the zb-then-brew fallback logic.
+```bash
+/opt/homebrew/bin/brew install starship sheldon fzf zoxide eza bat ripgrep fd atuin mise git-delta uv
+```
 
-Track any failures. After all 12 are attempted, report results to the user. If any failed, list them and note they can be installed manually later with `zb install <pkg>` or `brew install <pkg>`.
+This may take 1-3 minutes. Homebrew will skip any already-installed tools.
+
+After completion, verify each binary is reachable:
+
+| Binary | Package |
+|--------|---------|
+| `starship` | `starship` |
+| `sheldon` | `sheldon` |
+| `fzf` | `fzf` |
+| `zoxide` | `zoxide` |
+| `eza` | `eza` |
+| `bat` | `bat` |
+| `rg` | `ripgrep` |
+| `fd` | `fd` |
+| `atuin` | `atuin` |
+| `mise` | `mise` |
+| `delta` | `git-delta` |
+| `uv` | `uv` |
+
+Check with: `export PATH="/opt/homebrew/bin:$PATH" && command -v <binary>` for each.
+
+Report results to the user. If any failed, list them and note they can be installed manually later with `brew install <pkg>`.
 
 ## Step 7: Configure Sheldon (Plugin Manager)
 
@@ -404,7 +407,8 @@ After all steps, summarize what happened:
 
 **Manual steps the user should do themselves:**
 
-1. `atuin register` or `atuin login` — encrypted shell history sync (optional)
-2. `git config --global user.name "..."` and `git config --global user.email "..."` — if not already set
-3. SSH keys — copy from old machine or generate new
-4. `~/.env.secrets` with `chmod 600` — for API keys
+1. **Set up Zerobrew** (recommended) — run `zb init` in your terminal (needs your password, one-time). After that, `zb install <pkg>` installs CLI tools 2-20x faster than `brew install`
+2. `atuin register` or `atuin login` — encrypted shell history sync (optional)
+3. `git config --global user.name "..."` and `git config --global user.email "..."` — if not already set
+4. SSH keys — copy from old machine or generate new
+5. `~/.env.secrets` with `chmod 600` — for API keys
