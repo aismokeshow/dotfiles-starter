@@ -30,7 +30,7 @@ Strategy: check if installed, try Zerobrew, fall back to Homebrew, verify.
 
    If found, run:
    ```bash
-   zb install <package>
+   export PATH="$HOME/.local/bin:/opt/zerobrew/bin:/opt/zerobrew/prefix/bin:$PATH" && zb install <package>
    ```
    After install, check PATH directories for the new binary:
    - `/opt/zerobrew/bin/`
@@ -44,10 +44,11 @@ Strategy: check if installed, try Zerobrew, fall back to Homebrew, verify.
    - Apple Silicon (`uname -m` = `arm64`): `/opt/homebrew/bin/brew`
    - Intel (`uname -m` = `x86_64`): `/usr/local/bin/brew`
 
-   Install the tool:
+   Install the tool using absolute path:
    ```bash
-   brew install <package>
+   /opt/homebrew/bin/brew install <package>
    ```
+   (Use `/usr/local/bin/brew` on Intel Macs.)
 
 5. **Verify installation.**
    ```bash

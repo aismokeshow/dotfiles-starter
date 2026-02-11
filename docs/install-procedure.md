@@ -77,11 +77,13 @@ If missing, tell the user exactly this (copy-paste friendly, beginner-safe):
 
 **Wait for user confirmation before continuing.** Do not proceed on silence or ambiguous responses. Only continue when the user explicitly confirms Homebrew is installed.
 
-After Homebrew is confirmed, ensure it's in PATH:
+After Homebrew is confirmed, verify it's reachable:
 
 ```bash
-eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null)" || eval "$(/usr/local/bin/brew shellenv 2>/dev/null)"
+/opt/homebrew/bin/brew --version 2>/dev/null || /usr/local/bin/brew --version 2>/dev/null
 ```
+
+**Important:** Claude Code's Bash tool does not persist shell state between commands. `eval "$(brew shellenv)"` only affects the current command. For all subsequent `brew` commands in this procedure, **always use the absolute path**: `/opt/homebrew/bin/brew` (Apple Silicon) or `/usr/local/bin/brew` (Intel).
 
 ## Step 4: Install Zerobrew
 
@@ -101,13 +103,19 @@ curl -sSL https://raw.githubusercontent.com/lucasgelfond/zerobrew/main/install.s
 export PATH="$HOME/.local/bin:/opt/zerobrew/bin:/opt/zerobrew/prefix/bin:$PATH"
 ```
 
+**Initialize Zerobrew** (required before first use):
+
+```bash
+zb init
+```
+
 **Verification:** Run `zb --version 2>&1`. If it fails with a library error (e.g., `liblzma` not found), install the dependency:
 
 ```bash
-brew install xz
+/opt/homebrew/bin/brew install xz
 ```
 
-Then verify again. If `zb` still fails, warn the user that Zerobrew is not working — Homebrew will be used as the sole fallback. Continue either way.
+Then verify `zb --version` again. If `zb` still fails, warn the user that Zerobrew is not working — Homebrew will be used as the sole fallback. Continue either way.
 
 ## Step 5: Install Brewfile (if present)
 
@@ -120,10 +128,10 @@ Check for a Brewfile in the starter directory:
 test -f Brewfile && echo "found" || echo "none"
 ```
 
-If found, this requires Homebrew. Use the **ensure-tool-installed** skill to ensure `brew` is available (binary: `brew`, package: `homebrew`), then run:
+If found, run:
 
 ```bash
-brew bundle install --file=Brewfile --no-lock
+/opt/homebrew/bin/brew bundle install --file=Brewfile --no-lock
 ```
 
 If Brewfile is not found, skip this step entirely.
