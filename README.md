@@ -32,19 +32,19 @@ Drop Oh My Zsh. Get [Starship](https://starship.rs), [Sheldon](https://sheldon.c
 
 ## Install
 
-Open [Claude Code](https://github.com/anthropics/claude-code) and paste:
+Open [Claude Code](https://github.com/anthropics/claude-code) and paste this single command:
 
 ```
-Install this on my Mac → https://github.com/aismokeshow/dotfiles-starter
+clone https://github.com/aismokeshow/dotfiles-starter to ~/.aismokeshow/dotfiles-starter then cd in and follow the CLAUDE.md
 ```
 
-That's it. Claude handles [Homebrew](https://brew.sh), 12 CLI tools, plugin configuration, cached init scripts, and symlinks your config. The only manual step is restarting your terminal when it's done.
+That's it. Claude clones the repo, reads the install instructions, and handles everything — [Homebrew](https://brew.sh), 12 CLI tools, plugin configuration, cached init scripts, and symlinks. The only manual step is restarting your terminal when it's done.
 
 > [!TIP]
-> **Already cloned the repo?** Open Claude Code in the repo folder and type `/install`.
+> **Re-installing or already have the folder?** Open Claude Code in `~/.aismokeshow/dotfiles-starter` and type `/install`.
 
 <details>
-<summary><strong>Manual install</strong></summary>
+<summary><strong>Manual install (without Claude Code)</strong></summary>
 
 ```bash
 mkdir -p ~/.aismokeshow
