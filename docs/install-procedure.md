@@ -265,6 +265,17 @@ Use the **safe-merge-config** skill with:
 - **Strategy:** symlink
 - **Backup pattern:** `~/.zshrc.pre-dotfiles.YYYYMMDD-HHMMSS`
 
+**CRITICAL: This MUST be a symlink, not a copy.** The modular config uses `${0:A:h}` to resolve its directory via the symlink. If `.zshrc` is copied instead of symlinked, every `source` call will fail. Do NOT use `cp`, `Write`, or any other method — only `ln -sfn`.
+
+**Verify immediately after:**
+```bash
+readlink ~/.zshrc
+```
+The output must show a path ending in `zsh/.zshrc`. If `readlink` returns nothing, the symlink was not created — fix it:
+```bash
+ln -sfn "$(pwd)/zsh/.zshrc" ~/.zshrc
+```
+
 After symlinking, inform the user:
 
 > `~/.zshrc` is now a symlink to this folder. **Do not move or delete this folder** — your shell config lives here permanently.
