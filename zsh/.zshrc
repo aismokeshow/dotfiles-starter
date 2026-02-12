@@ -10,6 +10,14 @@ unsetopt CORRECT_ALL
 
 DOTFILES_ZSH="${0:A:h}"  # Directory of this file (follows symlinks)
 
+# Guard: this config only works as a symlink to the dotfiles-starter repo.
+# If copied instead of symlinked, $DOTFILES_ZSH resolves to ~ and modules won't be found.
+if [[ ! -f "$DOTFILES_ZSH/paths.zsh" ]]; then
+    echo "ERROR: ~/.zshrc must be a symlink to dotfiles-starter/zsh/.zshrc, not a copy." >&2
+    echo "Fix: ln -sfn ~/.aismokeshow/dotfiles-starter/zsh/.zshrc ~/.zshrc" >&2
+    return 1
+fi
+
 # === Load Modules (pre-plugin) ===
 source "$DOTFILES_ZSH/paths.zsh"
 source "$DOTFILES_ZSH/exports.zsh"
