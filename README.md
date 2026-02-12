@@ -81,7 +81,7 @@ This config replaces all of that with purpose-built Rust tools: [Starship](https
 
 | Role | Old | New |
 |------|-----|-----|
-| File listing | `ls` | [eza](https://github.com/eza-community/eza) — icons, git status, tree view |
+| File listing | `ls` | [eza](https://github.com/eza-community/eza) — icons ([Nerd Font](https://www.nerdfonts.com/) required), git status, tree view |
 | File viewing | `cat` | [bat](https://github.com/sharkdp/bat) — syntax highlighting, auto-paging |
 | Search | `grep` | [ripgrep](https://github.com/BurntSushi/ripgrep) — 10-100x faster, .gitignore-aware |
 | Find files | `find` | [fd](https://github.com/sharkdp/fd) — simpler syntax, faster |
@@ -137,6 +137,7 @@ The install process makes these changes (Claude asks before each one):
 
 - **Installs [Homebrew](https://brew.sh)** if needed — the macOS package manager
 - **Installs 12 CLI tools** — Starship, Sheldon, fzf, zoxide, eza, bat, ripgrep, fd, Atuin, mise, delta, uv
+- **Installs [JetBrains Mono Nerd Font](https://www.nerdfonts.com/)** — required for file icons in `ls` (you'll need to set it as your terminal font)
 - **Configures [Sheldon](https://sheldon.cli.rs)** with 4 plugins — zsh-defer, autosuggestions, history-substring-search, syntax-highlighting
 - **Symlinks `~/.zshrc`** to the modular config in this folder (backs up existing .zshrc)
 - **Writes `~/.zprofile`** with Homebrew PATH setup (backs up existing)

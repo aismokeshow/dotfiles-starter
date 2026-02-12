@@ -138,10 +138,37 @@ Check with: `export PATH="/opt/homebrew/bin:$PATH" && command -v <binary>` for e
 
 Report results to the user. If any failed, list them and note they can be installed manually later with `brew install <pkg>`.
 
-## Step 6: Configure Sheldon (Plugin Manager)
+## Step 6: Install Nerd Font (for file icons)
+
+**Precondition:** Step 3 completed (Homebrew available).
+**Goal:** Install a Nerd Font so `eza --icons` renders file type icons instead of `?` boxes.
+
+The eza aliases in `zsh/aliases.zsh` use `--icons` by default. This requires a font that includes [Nerd Font](https://www.nerdfonts.com/) glyphs. Without one, icons show as broken boxes.
+
+```bash
+/opt/homebrew/bin/brew install --cask font-jetbrains-mono-nerd-font 2>&1
+```
+
+If this fails (e.g., the cask tap is missing), try adding the tap first:
+
+```bash
+/opt/homebrew/bin/brew tap homebrew/cask-fonts 2>/dev/null; /opt/homebrew/bin/brew install --cask font-jetbrains-mono-nerd-font 2>&1
+```
+
+**Verification:** Check the font is installed:
+```bash
+ls ~/Library/Fonts/*JetBrains*Nerd* 2>/dev/null || ls /Library/Fonts/*JetBrains*Nerd* 2>/dev/null || echo "not found"
+```
+
+If the font installed successfully, note this for the post-install message — the user will need to set their terminal font.
+
+If the font install fails entirely, warn the user: "I couldn't install the Nerd Font. Your `ls` will show `?` instead of file icons. You can install it manually later: `brew install --cask font-jetbrains-mono-nerd-font`"
+
+## Step 7: Configure Sheldon (Plugin Manager)
 
 **Precondition:** Step 5 completed.
 **Goal:** Symlink the Sheldon config and download plugins.
+
 
 ```bash
 mkdir -p "$HOME/.config/sheldon"
@@ -158,7 +185,7 @@ If `sheldon lock` fails, warn: "Plugins will download on first shell start."
 
 **Verification:** `~/.config/sheldon/plugins.toml` exists and is a symlink.
 
-## Step 7: Configure Starship Prompt
+## Step 8: Configure Starship Prompt
 
 **Precondition:** Step 5 completed.
 **Goal:** Symlink the Starship config.
@@ -170,7 +197,7 @@ ln -sf "$(pwd)/zsh/starship.toml" "$HOME/.config/starship.toml"
 
 **Verification:** `~/.config/starship.toml` exists and is a symlink.
 
-## Step 8: Configure mise (Runtime Version Manager)
+## Step 9: Configure mise (Runtime Version Manager)
 
 **Precondition:** Step 5 completed.
 **Goal:** Create a default mise config and install runtimes.
@@ -198,9 +225,9 @@ mise install 2>&1
 
 This may take several minutes. If it fails, warn: "Run `mise install` manually after shell restart."
 
-## Step 9: Cache Shell Init Scripts
+## Step 10: Cache Shell Init Scripts
 
-**Precondition:** Steps 5-7 completed.
+**Precondition:** Steps 5-8 completed.
 **Goal:** Pre-cache init scripts so .zshrc loads from cache instead of running `eval` on every startup.
 
 ```bash
@@ -221,7 +248,7 @@ Skip any tool that is not installed.
 
 **Verification:** `ls ~/.cache/zsh/` shows `.zsh` files for each installed tool.
 
-## Step 10: Set Up Completions Directory
+## Step 11: Set Up Completions Directory
 
 **Precondition:** None.
 **Goal:** Ensure the custom completions directory exists.
@@ -230,16 +257,16 @@ Skip any tool that is not installed.
 mkdir -p "$HOME/.config/zsh/completions" "$HOME/.zsh/cache"
 ```
 
-## Step 11: Migrate Custom Config and Symlink .zshrc
+## Step 12: Migrate Custom Config and Symlink .zshrc
 
-**Precondition:** Step 10 completed.
+**Precondition:** Step 11 completed.
 **Goal:** Preserve any custom shell configuration, then replace `~/.zshrc` with a symlink to this repo's modular config.
 
 > **DESTRUCTIVE BOUNDARY** — This replaces the user's shell configuration.
 > Tell the user: "I'm about to replace your `~/.zshrc` with a symlink to this starter's modular config. Your existing `.zshrc` will be backed up, and I'll automatically preserve any custom aliases, functions, exports, or PATH entries I find in it. Proceed?"
 > **Wait for explicit confirmation.**
 
-### Step 11a: Extract custom content from existing .zshrc
+### Step 12a: Extract custom content from existing .zshrc
 
 Read `~/.zshrc`. If it exists and is not empty, compare its contents against `zsh/.zshrc` (the new config). Identify any lines that are custom — aliases, functions, export statements, PATH additions, or source commands that are NOT part of the new modular config.
 
@@ -257,7 +284,7 @@ Tell the user what was migrated: "I found X custom lines in your existing .zshrc
 
 If nothing custom is found, skip this substep silently.
 
-### Step 11b: Backup and symlink
+### Step 12b: Backup and symlink
 
 Use the **safe-merge-config** skill with:
 - **Target file:** `~/.zshrc`
@@ -280,9 +307,9 @@ After symlinking, inform the user:
 
 > `~/.zshrc` is now a symlink to this folder. **Do not move or delete this folder** — your shell config lives here permanently.
 
-## Step 12: Write .zprofile
+## Step 13: Write .zprofile
 
-**Precondition:** Step 11 completed.
+**Precondition:** Step 12 completed.
 **Goal:** Ensure `~/.zprofile` sets up PATH for Homebrew and OrbStack.
 
 Use the **safe-merge-config** skill with:
@@ -306,9 +333,9 @@ source ~/.orbstack/shell/init.zsh 2>/dev/null || true
 - **Detect existing:** check for `"CLI tools PATH setup"` marker string
 - **Backup pattern:** `~/.zprofile.pre-dotfiles.YYYYMMDD-HHMMSS`
 
-## Step 13: Verify Default Shell
+## Step 14: Verify Default Shell
 
-**Precondition:** Step 12 completed.
+**Precondition:** Step 13 completed.
 **Goal:** Ensure the user's login shell is zsh.
 
 ```bash
@@ -321,7 +348,7 @@ If the output does not end in `/zsh`, tell the user:
 
 This is informational only — do not run `chsh` automatically.
 
-## Step 14: Validate Installation
+## Step 15: Validate Installation
 
 **Precondition:** All previous steps completed.
 **Goal:** Confirm symlinks are correct and all tools are available.
@@ -372,16 +399,16 @@ source ~/.zshrc
 checkhealth
 ```
 
-## Step 15: Switch to Operational Mode
+## Step 16: Switch to Operational Mode
 
-**Precondition:** Step 14 passed (or user acknowledged missing tools).
+**Precondition:** Step 15 passed (or user acknowledged missing tools).
 **Goal:** Replace the install-phase CLAUDE.md with the operational hub version.
 
 ```bash
 cp .claude/CLAUDE.hub.md CLAUDE.md
 ```
 
-Write a marker file so future agents can detect this is an active install (even if `.git` was removed in Step 16):
+Write a marker file so future agents can detect this is an active install (even if `.git` was removed in Step 17):
 
 ```bash
 date -u '+%Y-%m-%dT%H:%M:%SZ' > .installed
@@ -389,9 +416,9 @@ date -u '+%Y-%m-%dT%H:%M:%SZ' > .installed
 
 Tell the user: "CLAUDE.md has been switched to operational mode. Future Claude Code sessions in this folder will see the hub instructions instead of the install flow."
 
-## Step 16: Optional Cleanup
+## Step 17: Optional Cleanup
 
-**Precondition:** Step 15 completed.
+**Precondition:** Step 16 completed.
 **Goal:** Remove packaging artifacts if the user wants a clean install.
 
 > **DESTRUCTIVE BOUNDARY** — This removes git history and the ability to pull updates.
@@ -428,6 +455,10 @@ After all steps, print this completion message. Use the exact structure and ASCI
 > **One last thing.** Open a new terminal window (⌘N) and you'll see a clean new prompt with a `>` character — that's [Starship](https://starship.rs). Everything is working.
 >
 > (You're inside Claude Code right now, so your new config won't load here. Just open a fresh terminal window next to this one to see it.)
+
+**Then the font setup instruction (only if the Nerd Font was installed in Step 6):**
+
+> **To see file icons in `ls`:** Open **Terminal → Settings → Profiles → Font → Change**, select **"JetBrainsMono Nerd Font"**, then restart your terminal.
 
 **Then the VIBE-GUIDE callout:**
 

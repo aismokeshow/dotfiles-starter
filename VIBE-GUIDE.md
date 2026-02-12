@@ -19,6 +19,8 @@ tree            # folder tree view (no more installing tree separately)
 
 You'll never think about this. It just looks better.
 
+> **Seeing `?` boxes instead of icons?** Open **Terminal → Settings → Profiles → Font → Change**, select **"JetBrainsMono Nerd Font"**, and restart your terminal. The installer already added the font — it just needs to be selected.
+
 ---
 
 ## Your New `cat` is `bat`
