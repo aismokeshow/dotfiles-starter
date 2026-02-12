@@ -8,10 +8,16 @@ ulimit -n unlimited 2>/dev/null || ulimit -n 10240
 unsetopt CORRECT
 unsetopt CORRECT_ALL
 
-DOTFILES_ZSH="${0:A:h}"  # Directory of this file (follows symlinks)
+# Resolve the directory of this file by following the ~/.zshrc symlink.
+# ${0:A:h} doesn't work in login shells ($0 is "-zsh", not the file path).
+if [[ -L ~/.zshrc ]]; then
+    DOTFILES_ZSH="${$(readlink ~/.zshrc):A:h}"
+else
+    # Fallback: if not a symlink, try $0 (works when sourced explicitly)
+    DOTFILES_ZSH="${0:A:h}"
+fi
 
-# Guard: this config only works as a symlink to the dotfiles-starter repo.
-# If copied instead of symlinked, $DOTFILES_ZSH resolves to ~ and modules won't be found.
+# Guard: verify modules are reachable
 if [[ ! -f "$DOTFILES_ZSH/paths.zsh" ]]; then
     echo "ERROR: ~/.zshrc must be a symlink to dotfiles-starter/zsh/.zshrc, not a copy." >&2
     echo "Fix: ln -sfn ~/.aismokeshow/dotfiles-starter/zsh/.zshrc ~/.zshrc" >&2
