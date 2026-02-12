@@ -19,7 +19,7 @@ tree            # folder tree view (no more installing tree separately)
 
 You'll never think about this. It just looks better.
 
-> **Seeing `?` boxes instead of icons?** The installer sets JetBrains Mono Nerd Font as your Terminal.app font automatically. If icons still show as boxes, open **Terminal → Settings → Profiles → Font → Change**, select **"JetBrainsMono Nerd Font"**, and restart your terminal.
+> **Seeing `?` boxes instead of icons?** The installer configures your terminal font automatically. If icons still show as boxes, set your terminal font to **"JetBrainsMono Nerd Font"** manually, then restart your terminal.
 
 ---
 

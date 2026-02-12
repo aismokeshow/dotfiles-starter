@@ -32,18 +32,26 @@ xcode-select -p 2>/dev/null
 
 If this fails, tell the user:
 
-> **One thing first.** Your Mac needs Apple's developer tools installed (don't worry — it's just a standard system component, not the full Xcode app).
->
-> 1. Copy and paste this into your terminal, then hit Enter:
->
-> ```
-> xcode-select --install
-> ```
->
-> 2. A popup will appear — click **"Install"** and wait for it to finish
-> 3. Come back here and say **"done"**
+```
+╔══════════════════════════════════════════════════════════════╗
+║  🛑  YOUR TURN — Claude can't do this step for you          ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  Your Mac needs Apple's developer tools installed            ║
+║  (just a standard system component, not the full Xcode app). ║
+║                                                              ║
+║  1. Copy and paste this into your terminal, then hit Enter:  ║
+║                                                              ║
+║     xcode-select --install                                   ║
+║                                                              ║
+║  2. A popup will appear — click "Install" and wait           ║
+║  3. Come back here and say "done"                            ║
+║                                                              ║
+║  ⏎ Come back here and say "done" when finished               ║
+╚══════════════════════════════════════════════════════════════╝
+```
 
-**Wait for user confirmation before continuing.**
+**MANDATORY GATE — Do not proceed until the user explicitly confirms. Silence or ambiguous responses are NOT confirmation.**
 
 ## Step 3: Install Homebrew
 
@@ -58,24 +66,30 @@ Check if already installed:
 
 If missing, tell the user exactly this (copy-paste friendly, beginner-safe):
 
-> **One quick thing I need your help with.** Homebrew (the macOS package manager) needs your password to install, and I can't type passwords for you. This is the only manual step in the whole process.
->
-> **Here's what to do:**
->
-> 1. Open a new terminal window next to this one (⌘N)
-> 2. Copy and paste this entire line, then hit Enter:
->
-> ```
-> /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-> ```
->
-> 3. Type your Mac password when asked (you won't see it as you type — that's normal)
-> 4. Wait for it to finish (1-3 minutes)
-> 5. Come back here and say **"done"**
->
-> That's it — I'll handle everything else from there.
+```
+╔══════════════════════════════════════════════════════════════╗
+║  🛑  YOUR TURN — Claude can't do this step for you          ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  Homebrew (the macOS package manager) needs your password    ║
+║  to install, and I can't type passwords for you.             ║
+║                                                              ║
+║  1. Open a new terminal window next to this one (⌘N)         ║
+║  2. Copy and paste this entire line, then hit Enter:         ║
+║                                                              ║
+║     /bin/bash -c "$(curl -fsSL                               ║
+║       https://raw.githubusercontent.com/Homebrew/            ║
+║       install/HEAD/install.sh)"                              ║
+║                                                              ║
+║  3. Type your Mac password when asked                        ║
+║     (you won't see it as you type — that's normal)           ║
+║  4. Wait for it to finish (1-3 minutes)                      ║
+║                                                              ║
+║  ⏎ Come back here and say "done" when finished               ║
+╚══════════════════════════════════════════════════════════════╝
+```
 
-**Wait for user confirmation before continuing.** Do not proceed on silence or ambiguous responses. Only continue when the user explicitly confirms Homebrew is installed.
+**MANDATORY GATE — Do not proceed until the user explicitly confirms. Silence or ambiguous responses are NOT confirmation.**
 
 After Homebrew is confirmed, verify it's reachable:
 
@@ -160,18 +174,43 @@ If this fails (e.g., the cask tap is missing), try adding the tap first:
 ls ~/Library/Fonts/*JetBrains*Nerd* 2>/dev/null || ls /Library/Fonts/*JetBrains*Nerd* 2>/dev/null || echo "not found"
 ```
 
-If the font installed successfully, set it as Terminal.app's default font automatically:
+If the font installed successfully, configure the user's terminal to use it. Detect which terminal is running:
 
+```bash
+echo "$TERM_PROGRAM"
+```
+
+**If `Apple_Terminal` (Terminal.app):**
 ```bash
 osascript -l JavaScript -e 'var t = Application("Terminal"); t.defaultSettings.fontName = "JetBrainsMonoNF-Regular"; t.defaultSettings.fontSize = 14;'
 ```
+Verify: `osascript -l JavaScript -e 'Application("Terminal").defaultSettings.fontName()'` must return `JetBrainsMonoNF-Regular`.
 
-Verify it took effect:
+**If `ghostty` (Ghostty):**
 ```bash
-osascript -l JavaScript -e 'Application("Terminal").defaultSettings.fontName()'
+mkdir -p ~/.config/ghostty
+grep -q "font-family" ~/.config/ghostty/config 2>/dev/null && sed -i '' 's/^font-family.*/font-family = JetBrainsMono Nerd Font/' ~/.config/ghostty/config || echo "font-family = JetBrainsMono Nerd Font" >> ~/.config/ghostty/config
 ```
+Verify: `grep font-family ~/.config/ghostty/config` shows `font-family = JetBrainsMono Nerd Font`.
 
-Must return `JetBrainsMonoNF-Regular`. If it does, the font will apply to all new Terminal.app windows — no manual configuration needed.
+**If `iTerm.app` (iTerm2):**
+```bash
+mkdir -p "$HOME/Library/Application Support/iTerm2/DynamicProfiles"
+cat > "$HOME/Library/Application Support/iTerm2/DynamicProfiles/dotfiles-starter.json" << 'ITERM'
+{
+  "Profiles": [{
+    "Name": "Default",
+    "Guid": "dotfiles-starter-nerd-font",
+    "Normal Font": "JetBrainsMonoNF-Regular 14"
+  }]
+}
+ITERM
+```
+Tell the user: "I added a Nerd Font profile to iTerm2. Go to **Preferences → Profiles**, select **Default**, and it will use JetBrains Mono Nerd Font."
+
+**Any other terminal:** Tell the user: "Set your terminal font to **JetBrains Mono Nerd Font** in its settings. The font is installed — your terminal just needs to be configured to use it."
+
+The font change takes effect in new terminal windows.
 
 If the font install fails entirely, warn the user: "I couldn't install the Nerd Font. Your `ls` will show `?` instead of file icons. You can install it manually later: `brew install --cask font-jetbrains-mono-nerd-font`"
 
