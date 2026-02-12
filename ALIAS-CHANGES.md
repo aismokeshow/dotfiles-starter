@@ -41,10 +41,9 @@ This config replaces Oh My Zsh entirely. Here's what's different.
 | `regen-cache` | Regenerates cached init scripts for starship/zoxide/fzf/atuin/mise |
 | `checkhealth` | Verifies all 14 tools, init caches, and environment |
 | `yazi` | Shell cd-on-exit wrapper (cd to last dir when you quit yazi) |
-| `cook` | Claude Code with `--dangerously-skip-permissions` (bypasses all safety prompts — use only in trusted repos) |
 | `killport` | Graceful then forceful port killing |
 | `fcd` | Fuzzy cd to any directory (interactive directory picker) |
 
 ## Unchanged
 
-Safety aliases (`rm -i`, `cp -i`, `mv -i`), password generation (`pw`, `pw16`, `pwx`), navigation (`..`, `...`), zoxide shortcuts (`j`, `jj`, `zi`), FZF navigation (`pp`, `fe`, `fo`), port management (`k3`, `k3000`, `whatsup`).
+Safety aliases (`rm -i`, `cp -i`, `mv -i`), password generation (`pw`, `pw16`, `pwx`), navigation (`..`, `...`), zoxide shortcuts (`j`, `jj`, `zi`), FZF navigation (`pp`, `fe`, `fo`), port management (`ports`, `killnodes`).

@@ -192,8 +192,8 @@ Copy from terminal, paste wherever.
 | Search command history | `Ctrl+R` |
 | Switch Node version | `mise use node@20` |
 | Switch Python version | `mise use python@3.12` |
-| Check what's on a port | `whatsup` |
-| Kill port 3000 | `k3k` |
+| Check what's on a port | `ports` |
+| Kill a port | `killport 3000` |
 | Generate a password | `pw` |
 | Check everything works | `checkhealth` |
 | Refresh tool caches | `regen-cache` |
@@ -207,3 +207,7 @@ Run `checkhealth`. It tells you exactly what's missing or misconfigured.
 Run `regen-cache` if tools were recently upgraded and the shell feels stale.
 
 Beyond that — these tools have been vetted. Trust them. Use them for a week and you won't go back.
+
+## Worth Exploring
+
+**[direnv](https://direnv.net)** — Auto-loads environment variables when you `cd` into a project directory. Pairs well with mise for project-specific settings. Install: `brew install direnv`

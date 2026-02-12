@@ -138,7 +138,7 @@ The install process makes these changes (Claude asks before each one):
 - **Installs [Homebrew](https://brew.sh)** if needed — the macOS package manager
 - **Installs 12 CLI tools** — Starship, Sheldon, fzf, zoxide, eza, bat, ripgrep, fd, Atuin, mise, delta, uv
 - **Installs [JetBrains Mono Nerd Font](https://www.nerdfonts.com/)** — required for file icons in `ls` (you'll need to set it as your terminal font)
-- **Configures [Sheldon](https://sheldon.cli.rs)** with 4 plugins — zsh-defer, autosuggestions, history-substring-search, syntax-highlighting
+- **Configures [Sheldon](https://sheldon.cli.rs)** with 4 plugins — zsh-defer, autosuggestions, history-substring-search, [fast-syntax-highlighting](https://github.com/zdharma-continuum/fast-syntax-highlighting)
 - **Symlinks `~/.zshrc`** to the modular config in this folder (backs up existing .zshrc)
 - **Writes `~/.zprofile`** with Homebrew PATH setup (backs up existing)
 - **Caches init scripts** in `~/.cache/zsh/` for fast startup

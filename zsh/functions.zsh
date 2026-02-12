@@ -50,13 +50,6 @@ checkport() {
     local port=${1:-3000}
     lsof -i :"$port" 2>/dev/null || echo "Port $port is free"
 }
-
-# --- Claude Code ---
-
-cook() {
-    claude --dangerously-skip-permissions "$@"
-}
-
 # --- FZF Navigation ---
 
 fif() {
@@ -79,11 +72,6 @@ fzfp() {
 
 # --- Zoxide Helpers ---
 
-zcd() {
-    cd "$1" && zoxide add .
-    echo "Bookmarked: $PWD"
-}
-
 zclean() {
     local removed=0
     local dirs=("${(@f)$(zoxide query -l)}")
@@ -94,34 +82,6 @@ zclean() {
         fi
     done
     echo "Zoxide database cleaned: $removed entries removed"
-}
-
-zstats() {
-    echo "Zoxide Statistics:"
-    echo "-----------------"
-    local count=$(zoxide query -l | wc -l | tr -d ' ')
-    echo "Total directories: $count"
-    echo "\nTop 10 directories:"
-    zoxide query -l | head -10 | nl
-}
-
-zindex() {
-    local indexed=0
-    local start_path="${1:-$HOME/dev}"
-    echo "Indexing directories under $start_path..."
-    while read -r dir; do
-        zoxide add "$dir" 2>/dev/null && ((indexed++))
-        echo -n "."
-    done < <(fd --type d . "$start_path" --max-depth 2 2>/dev/null)
-    echo "\nIndexed $indexed directories"
-}
-
-zindex-projects() {
-    echo "Indexing all project directories..."
-    zindex ~/dev
-    zindex ~/.config
-    zindex ~/Documents
-    echo "\nDone! Your commonly used directories are now indexed"
 }
 
 # --- System Health ---
@@ -139,7 +99,12 @@ checkhealth() {
     command -v bat &>/dev/null       && echo "OK bat"           || echo "MISSING bat"
     command -v rg &>/dev/null        && echo "OK ripgrep"       || echo "MISSING ripgrep"
     command -v fd &>/dev/null        && echo "OK fd"            || echo "MISSING fd"
-    command -v delta &>/dev/null     && echo "OK delta"         || echo "MISSING delta"
+    if command -v delta &>/dev/null; then
+        echo "OK delta"
+        [[ "$(git config --global core.pager 2>/dev/null)" == "delta" ]] && echo "OK delta (git pager)" || echo "HINT run: git config --global core.pager delta"
+    else
+        echo "MISSING delta"
+    fi
     command -v uv &>/dev/null        && echo "OK uv"            || echo "MISSING uv"
     echo "\nEnvironment:"
     [[ -f ~/.env.secrets ]] && {

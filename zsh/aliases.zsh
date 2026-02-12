@@ -30,13 +30,6 @@ alias mv='mv -i'
 
 # === Ports ===
 alias ports='lsof -i -P -n | command grep LISTEN'
-alias whatsup='lsof -i -P -n | command grep LISTEN'
-alias k3='for p in {3000..3009}; do lsof -ti:$p &>/dev/null && killport $p; done'
-alias k3000='killport 3000'
-alias k3001='killport 3001'
-alias k3002='killport 3002'
-alias k3003='killport 3003'
-alias k3k='killport 3000'
 alias killnodes='pkill -f "node_modules/.bin|next-server|next dev|next start|ts-node|tsx" && echo "Force killed Node processes"'
 
 # === Next.js ===
@@ -73,10 +66,6 @@ alias fo='open "$(fzf --prompt="Open File> ")"'
 alias j='z'
 alias ji='zi'
 alias jj='zi'
-alias zq='zoxide query'
-alias zl='zoxide query -l'
-alias zs='zoxide query -ls'
-alias zrm='zoxide remove'
 
 # === MCP Server Management ===
 alias mcp-ls='claude mcp list'

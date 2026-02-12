@@ -32,24 +32,9 @@ xcode-select -p 2>/dev/null
 
 If this fails, tell the user:
 
-```
-╔══════════════════════════════════════════════════════════════╗
-║  🛑  YOUR TURN — Claude can't do this step for you          ║
-╠══════════════════════════════════════════════════════════════╣
-║                                                              ║
-║  Your Mac needs Apple's developer tools installed            ║
-║  (just a standard system component, not the full Xcode app). ║
-║                                                              ║
-║  1. Copy and paste this into your terminal, then hit Enter:  ║
-║                                                              ║
-║     xcode-select --install                                   ║
-║                                                              ║
-║  2. A popup will appear — click "Install" and wait           ║
-║  3. Come back here and say "done"                            ║
-║                                                              ║
-║  ⏎ Come back here and say "done" when finished               ║
-╚══════════════════════════════════════════════════════════════╝
-```
+Tell the user:
+
+> **Your turn** — I can't do this step. Run `xcode-select --install` in a separate terminal, click "Install" on the popup, then come back and say "done".
 
 **MANDATORY GATE — Do not proceed until the user explicitly confirms. Silence or ambiguous responses are NOT confirmation.**
 
@@ -66,28 +51,13 @@ Check if already installed:
 
 If missing, tell the user exactly this (copy-paste friendly, beginner-safe):
 
-```
-╔══════════════════════════════════════════════════════════════╗
-║  🛑  YOUR TURN — Claude can't do this step for you          ║
-╠══════════════════════════════════════════════════════════════╣
-║                                                              ║
-║  Homebrew (the macOS package manager) needs your password    ║
-║  to install, and I can't type passwords for you.             ║
-║                                                              ║
-║  1. Open a new terminal window next to this one (⌘N)         ║
-║  2. Copy and paste this entire line, then hit Enter:         ║
-║                                                              ║
-║     /bin/bash -c "$(curl -fsSL                               ║
-║       https://raw.githubusercontent.com/Homebrew/            ║
-║       install/HEAD/install.sh)"                              ║
-║                                                              ║
-║  3. Type your Mac password when asked                        ║
-║     (you won't see it as you type — that's normal)           ║
-║  4. Wait for it to finish (1-3 minutes)                      ║
-║                                                              ║
-║  ⏎ Come back here and say "done" when finished               ║
-╚══════════════════════════════════════════════════════════════╝
-```
+Tell the user:
+
+> **Your turn** — Homebrew needs your password. In a new terminal, run:
+> ```
+> /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+> ```
+> Come back and say "done" when finished.
 
 **MANDATORY GATE — Do not proceed until the user explicitly confirms. Silence or ambiguous responses are NOT confirmation.**
 
@@ -297,6 +267,26 @@ For each tool that is installed, generate its cache file:
 Skip any tool that is not installed.
 
 **Verification:** `ls ~/.cache/zsh/` shows `.zsh` files for each installed tool.
+
+## Step 10b: Configure Git to Use Delta
+
+**Precondition:** Step 5 completed (delta installed).
+**Goal:** Wire up delta as git's diff pager.
+
+Only run if delta is installed and git's pager is not already configured:
+
+```bash
+if command -v delta &>/dev/null && [[ -z "$(git config --global core.pager)" ]]; then
+    git config --global core.pager delta
+    git config --global interactive.diffFilter 'delta --color-only'
+    git config --global delta.navigate true
+    git config --global delta.side-by-side true
+    git config --global merge.conflictstyle diff3
+    git config --global diff.colorMoved default
+fi
+```
+
+**Verification:** `git config --global core.pager` returns `delta`.
 
 ## Step 11: Set Up Completions Directory
 
@@ -528,17 +518,6 @@ After all steps, print this completion message. Use the exact structure and ASCI
 
 **Then the branded sign-off (print this ASCII art exactly):**
 
-```
-    🔥
-   /||\
-  / || \
- /  ||  \
-/___||___\
-
- AISMOKESHOW
- aismokeshow.com
-
- You're all set. Welcome to the 2026 shell.
-```
+Print: "You're all set. Welcome to the 2026 shell. 🔥"
 
 **Important:** `~/.zshrc` is now a symlink to this folder. Don't move or delete it — your shell config lives here permanently.

@@ -16,13 +16,12 @@ dotfiles-starter/
 │   ├── starship.toml                      ← Prompt config (symlinked to ~/.config/)
 │   └── sheldon/plugins.toml               ← Plugin manager config (symlinked to ~/.config/sheldon/)
 ├── docs/
-│   └── install-procedure.md               ← 17-step atomic install manifest
+│   └── install-procedure.md               ← 18-step atomic install manifest
 ├── .claude/
 │   ├── CLAUDE.hub.md                      ← THIS FILE — operational reference
 │   ├── agents/
 │   │   └── install-dotfiles.md            ← Install agent (orchestrates full setup)
 │   ├── skills/
-│   │   ├── ensure-tool-installed/SKILL.md ← Homebrew tool installer
 │   │   └── safe-merge-config/SKILL.md     ← Non-destructive config file modifier
 │   └── commands/                          ← Slash command dispatchers
 ├── VIBE-GUIDE.md                          ← Beginner-friendly tool explainer
@@ -33,7 +32,6 @@ dotfiles-starter/
 
 **Skills:**
 - `safe-merge-config` — three modes: SYMLINK (replace file with symlink), ENSURE-LINES (append missing lines), WRITE-IF-MISSING (create only if absent). Always backs up, never silently discards content.
-- `ensure-tool-installed` — available for `/customize` flows: check if installed → try Zerobrew if available → fall back to Homebrew → verify.
 
 ## Symlink Architecture
 
@@ -74,7 +72,7 @@ Triggered by: `/install`
 
 If `.installed` exists in this directory, or `~/.zshrc` is already a symlink to this repo and tools are installed, tell the user everything is configured and offer to run `checkhealth`.
 
-Otherwise, the `install-dotfiles` agent handles the full setup. It reads `docs/install-procedure.md` and executes all 16 steps, using the `ensure-tool-installed` and `safe-merge-config` skills for tool installation and config file changes.
+Otherwise, the `install-dotfiles` agent handles the full setup. It reads `docs/install-procedure.md` and executes all steps, using the `safe-merge-config` skill for config file changes.
 
 ## Uninstall
 
