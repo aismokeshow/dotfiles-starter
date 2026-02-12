@@ -62,7 +62,7 @@ If missing, tell the user exactly this (copy-paste friendly, beginner-safe):
 >
 > **Here's what to do:**
 >
-> 1. Open a new Terminal window (⌘ + Space, type "Terminal", hit Enter)
+> 1. Open a new terminal window next to this one (⌘N)
 > 2. Copy and paste this entire line, then hit Enter:
 >
 > ```
