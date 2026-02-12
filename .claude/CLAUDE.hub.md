@@ -72,7 +72,7 @@ Modules loaded by `.zshrc`:
 
 Triggered by: `/install`
 
-If `~/.zshrc` is already a symlink to this repo and tools are installed, tell the user everything is configured and offer to run `checkhealth`.
+If `.installed` exists in this directory, or `~/.zshrc` is already a symlink to this repo and tools are installed, tell the user everything is configured and offer to run `checkhealth`.
 
 Otherwise, the `install-dotfiles` agent handles the full setup. It reads `docs/install-procedure.md` and executes all 16 steps, using the `ensure-tool-installed` and `safe-merge-config` skills for tool installation and config file changes.
 

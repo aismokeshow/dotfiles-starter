@@ -352,6 +352,12 @@ checkhealth
 cp .claude/CLAUDE.hub.md CLAUDE.md
 ```
 
+Write a marker file so future agents can detect this is an active install (even if `.git` was removed in Step 16):
+
+```bash
+date -u '+%Y-%m-%dT%H:%M:%SZ' > .installed
+```
+
 Tell the user: "CLAUDE.md has been switched to operational mode. Future Claude Code sessions in this folder will see the hub instructions instead of the install flow."
 
 ## Step 16: Optional Cleanup
