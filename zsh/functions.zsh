@@ -15,6 +15,12 @@ regen-cache() {
     echo "Done. Restart shell or: source ~/.zshrc"
 }
 
+# --- Claude Code Convenience ---
+
+smoke() {
+    claude --dangerously-skip-permissions "$@"
+}
+
 # --- Port Management ---
 
 killport() {

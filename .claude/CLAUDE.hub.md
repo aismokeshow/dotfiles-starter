@@ -53,6 +53,7 @@ Modules loaded by `.zshrc`:
 |---------|-------------|
 | `checkhealth` | Verify all tools + caches are working |
 | `regen-cache` | Refresh cached init scripts after tool upgrades |
+| `smoke` | Run Claude Code with `--dangerously-skip-permissions` (skips all confirmation prompts) |
 | `zb` | Optional: fast CLI tool installer (homebrew-core). `brew` works normally for casks/taps |
 
 ## Rules for Editing zsh/ Files

@@ -197,6 +197,7 @@ Copy from terminal, paste wherever.
 | Generate a password | `pw` |
 | Check everything works | `checkhealth` |
 | Refresh tool caches | `regen-cache` |
+| Run Claude Code without prompts | `smoke` |
 
 ---
 
