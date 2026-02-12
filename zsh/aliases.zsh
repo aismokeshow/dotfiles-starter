@@ -3,7 +3,7 @@
 # See ALIAS-CHANGES.md for what changed from a typical Oh My Zsh setup
 
 # === Package Managers ===
-# Both available: `zb` for fast CLI tool installs, `brew` for casks, taps, and services.
+# `brew` for packages. Optional: `zb` (Zerobrew) for faster CLI tool installs.
 
 # === Zsh Config ===
 alias zc='${EDITOR:-nano} ~/.zshrc'
@@ -46,14 +46,17 @@ alias knx="pgrep -f 'next dev|next start|next-server' | xargs kill -9 2>/dev/nul
 alias c='${EDITOR:-nano} .'
 
 # === Yazi (shell cd-on-exit wrapper) ===
-function yazi() {
-    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-    command yazi "$@" --cwd-file="$tmp"
-    if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-        builtin cd -- "$cwd"
-    fi
-    rm -f -- "$tmp"
-}
+# Install: brew install yazi
+if command -v yazi &>/dev/null; then
+    function yazi() {
+        local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+        command yazi "$@" --cwd-file="$tmp"
+        if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+            builtin cd -- "$cwd"
+        fi
+        rm -f -- "$tmp"
+    }
+fi
 
 # === Password Generation ===
 alias pw='openssl rand -base64 32 | tr -d "=+/" | cut -c1-32'

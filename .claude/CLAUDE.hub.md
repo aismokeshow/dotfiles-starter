@@ -22,7 +22,7 @@ dotfiles-starter/
 │   ├── agents/
 │   │   └── install-dotfiles.md            ← Install agent (orchestrates full setup)
 │   ├── skills/
-│   │   ├── ensure-tool-installed/SKILL.md ← Zerobrew-first, Homebrew-fallback tool installer
+│   │   ├── ensure-tool-installed/SKILL.md ← Homebrew tool installer
 │   │   └── safe-merge-config/SKILL.md     ← Non-destructive config file modifier
 │   └── commands/                          ← Slash command dispatchers
 ├── VIBE-GUIDE.md                          ← Beginner-friendly tool explainer
@@ -33,7 +33,7 @@ dotfiles-starter/
 
 **Skills:**
 - `safe-merge-config` — three modes: SYMLINK (replace file with symlink), ENSURE-LINES (append missing lines), WRITE-IF-MISSING (create only if absent). Always backs up, never silently discards content.
-- `ensure-tool-installed` — available for `/customize` flows: check if installed → install via Homebrew → verify.
+- `ensure-tool-installed` — available for `/customize` flows: check if installed → try Zerobrew if available → fall back to Homebrew → verify.
 
 ## Symlink Architecture
 
@@ -55,7 +55,7 @@ Modules loaded by `.zshrc`:
 |---------|-------------|
 | `checkhealth` | Verify all tools + caches are working |
 | `regen-cache` | Refresh cached init scripts after tool upgrades |
-| `zb` | Fast CLI tool installer (homebrew-core). `brew` works normally for casks/taps |
+| `zb` | Optional: fast CLI tool installer (homebrew-core). `brew` works normally for casks/taps |
 
 ## Rules for Editing zsh/ Files
 

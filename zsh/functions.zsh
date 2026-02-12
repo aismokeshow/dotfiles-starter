@@ -129,8 +129,6 @@ zindex-projects() {
 checkhealth() {
     echo "System Health Check:"
     echo "-------------------"
-    command -v claude &>/dev/null    && echo "OK Claude Code"   || echo "MISSING Claude Code"
-    command -v zb &>/dev/null        && echo "OK Zerobrew"      || echo "MISSING Zerobrew"
     command -v starship &>/dev/null  && echo "OK Starship"      || echo "MISSING Starship"
     command -v sheldon &>/dev/null   && echo "OK Sheldon"       || echo "MISSING Sheldon"
     command -v fzf &>/dev/null       && echo "OK FZF"           || echo "MISSING FZF"

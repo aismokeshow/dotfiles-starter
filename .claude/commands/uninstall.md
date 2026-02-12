@@ -45,7 +45,7 @@ EOF
 
 5. Restore or remove ~/.zprofile:
 ```bash
-if [[ -f ~/.zprofile ]] && grep -q "Zerobrew PATH setup" ~/.zprofile 2>/dev/null; then
+if [[ -f ~/.zprofile ]] && grep -q "CLI tools PATH setup" ~/.zprofile 2>/dev/null; then
     # Check for backup
     if ls ~/.zprofile.pre-dotfiles.* 2>/dev/null; then
         echo "Found .zprofile backup(s). Restore with: mv ~/.zprofile.pre-dotfiles.TIMESTAMP ~/.zprofile"

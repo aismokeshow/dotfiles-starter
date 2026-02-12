@@ -1,5 +1,5 @@
 ---
-description: Full setup — Zerobrew, Homebrew, 12 CLI tools, shell config, symlinks
+description: Full setup — Homebrew, 12 CLI tools, shell config, symlinks
 ---
 
 Use the install-dotfiles agent to handle this request.

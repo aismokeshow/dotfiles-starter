@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# ~/.zshrc — Modular Zsh Configuration (Zerobrew-native, 2026 stack)
+# ~/.zshrc — Modular Zsh Configuration (2026 stack)
 # Sheldon + Starship + zsh-defer. No Oh My Zsh.
 
 # === Early Init ===

@@ -28,7 +28,7 @@ export BUN_INSTALL="$HOME/.bun"
 
 # DYLD_FALLBACK_LIBRARY_PATH intentionally NOT set globally.
 # Setting it affects all dynamically-linked binaries and can break system tools.
-# If a specific tool needs it, set it per-command: DYLD_FALLBACK_LIBRARY_PATH=/opt/zerobrew/lib command
+# If a specific tool needs it, set it per-command: DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib command
 
 # Load environment files (separated by security level)
 [[ -f ~/.env.public ]] && source ~/.env.public

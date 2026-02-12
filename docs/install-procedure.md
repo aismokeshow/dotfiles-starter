@@ -279,7 +279,7 @@ Use the **safe-merge-config** skill with:
 - **Content to ensure is present:**
 
 ```bash
-# Zerobrew PATH setup (zb does NOT have a shellenv subcommand)
+# CLI tools PATH setup
 [[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
 [[ -d "/opt/zerobrew/bin" ]] && export PATH="/opt/zerobrew/bin:$PATH"
 [[ -d "/opt/zerobrew/prefix/bin" ]] && export PATH="/opt/zerobrew/prefix/bin:$PATH"
@@ -292,7 +292,7 @@ source ~/.orbstack/shell/init.zsh 2>/dev/null || true
 ```
 
 - **Strategy:** merge — preserve existing user content, add missing blocks
-- **Detect existing:** check for `"Zerobrew PATH setup"` marker string
+- **Detect existing:** check for `"CLI tools PATH setup"` marker string
 - **Backup pattern:** `~/.zprofile.pre-dotfiles.YYYYMMDD-HHMMSS`
 
 ## Step 13: Verify Default Shell
@@ -384,23 +384,49 @@ MIT — [aismokeshow](https://www.aismokeshow.com/) · [dotfiles-starter](https:
 
 ## Post-Install: Tell the User
 
-After all steps, summarize what happened:
+After all steps, print this completion message. Use the exact structure and ASCII art below — do NOT improvise, rearrange, or add extra suggestions.
 
-- `~/.zshrc` is a symlink to this folder — do not move or delete it
-- Modern replacements are active: `ls` -> eza, `cat` -> bat, `grep` -> ripgrep, `find` -> fd, `cd` -> zoxide
-- Run `checkhealth` anytime to verify the stack
-- Run `regen-cache` after upgrading cached tools
-- See `VIBE-GUIDE.md` for a beginner-friendly explanation of every tool
+---
 
-**Manual steps the user should do themselves:**
+**First, the activation instruction (lead with this):**
 
-1. **Optional: Set up Zerobrew for faster future installs** — run these two commands in your terminal (needs your password, one-time):
-   ```
-   curl -sSL https://raw.githubusercontent.com/lucasgelfond/zerobrew/main/install.sh | bash
-   zb init
-   ```
-   After that, `zb install <pkg>` installs CLI tools 2-20x faster than `brew install`. Completely optional — `brew` works fine on its own.
-2. `atuin register` or `atuin login` — encrypted shell history sync (optional)
-3. `git config --global user.name "..."` and `git config --global user.email "..."` — if not already set
-4. SSH keys — copy from old machine or generate new
-5. `~/.env.secrets` with `chmod 600` — for API keys
+> **One last thing.** Open a new terminal window (⌘N) and you'll see a clean new prompt with a `>` character — that's [Starship](https://starship.rs). Everything is working.
+>
+> (You're inside Claude Code right now, so your new config won't load here. Just open a fresh terminal window next to this one to see it.)
+
+**Then the VIBE-GUIDE callout:**
+
+> Open `VIBE-GUIDE.md` in this folder to learn what you just installed — every tool explained in plain English with examples you can try right away.
+
+**Then a quick primer (keep it short):**
+
+> Here are three things to try in your new shell:
+>
+> - Type `ls` — you'll see file icons and git status (that's [eza](https://github.com/eza-community/eza))
+> - Type `z <folder>` — jump to any directory you've visited before (that's [zoxide](https://github.com/ajeetdsouza/zoxide))
+> - Type `checkhealth` — verify all 12 tools are installed and working
+
+**Then optional next steps:**
+
+> **Optional next steps** (do these whenever you're ready):
+>
+> - `atuin register` — sync your shell history across machines (encrypted)
+> - `git config --global user.name "Your Name"` — if not already set
+> - `~/.env.secrets` — put API keys here, then `chmod 600 ~/.env.secrets`
+
+**Then the branded sign-off (print this ASCII art exactly):**
+
+```
+    🔥
+   /||\
+  / || \
+ /  ||  \
+/___||___\
+
+ AISMOKESHOW
+ aismokeshow.com
+
+ You're all set. Welcome to the 2026 shell.
+```
+
+**Important:** `~/.zshrc` is now a symlink to this folder. Don't move or delete it — your shell config lives here permanently.

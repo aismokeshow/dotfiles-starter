@@ -4,7 +4,7 @@
 
 **A modern shell config that just works.**
 
-Drop Oh My Zsh. Get [Zerobrew](https://github.com/lucasgelfond/zerobrew), [Starship](https://starship.rs), [Sheldon](https://sheldon.cli.rs), and 12 modern CLI tools — configured, cached, and ready to go.
+Drop Oh My Zsh. Get [Starship](https://starship.rs), [Sheldon](https://sheldon.cli.rs), and 12 modern CLI tools — configured, cached, and ready to go.
 
 <p>
   <img src="https://img.shields.io/github/license/aismokeshow/dotfiles-starter?style=flat-square&labelColor=000&color=ff9500" alt="MIT License">
@@ -38,7 +38,7 @@ Open [Claude Code](https://github.com/anthropics/claude-code) and paste:
 Install this on my Mac → https://github.com/aismokeshow/dotfiles-starter
 ```
 
-That's it. Claude handles [Zerobrew](https://github.com/lucasgelfond/zerobrew), 12 CLI tools, plugin configuration, cached init scripts, and symlinks your config. [Homebrew](https://brew.sh) is installed as a fallback if any tool fails via Zerobrew. The only manual step is running `source ~/.zshrc` when it's done.
+That's it. Claude handles [Homebrew](https://brew.sh), 12 CLI tools, plugin configuration, cached init scripts, and symlinks your config. The only manual step is restarting your terminal when it's done.
 
 > [!TIP]
 > **Already cloned the repo?** Open Claude Code in the repo folder and type `/install`.
@@ -60,7 +60,7 @@ claude
 
 | Command | What it does |
 |---|---|
-| `/install` | Full setup — Zerobrew + Homebrew, 12 tools, config, symlinks |
+| `/install` | Full setup — Homebrew, 12 tools, config, symlinks |
 | `/customize` | Change aliases, paths, prompt, plugins, or exports |
 | `/uninstall` | Unlink config and restore previous .zshrc |
 
@@ -102,7 +102,7 @@ This config replaces all of that with purpose-built Rust tools: [Starship](https
 zsh/
 ├── .zshrc          # Entry point — 77 lines
 ├── exports.zsh     # Environment variables
-├── paths.zsh       # PATH ordering (Zerobrew + mise + Homebrew)
+├── paths.zsh       # PATH ordering (mise + Homebrew)
 ├── aliases.zsh     # Modern CLI replacements + utilities
 ├── functions.zsh   # checkhealth, regen-cache, killport, etc.
 ├── starship.toml   # Prompt config
@@ -114,9 +114,9 @@ zsh/
 
 [Starship](https://starship.rs), [zoxide](https://github.com/ajeetdsouza/zoxide), [fzf](https://github.com/junegunn/fzf), [Atuin](https://github.com/atuinsh/atuin), and [mise](https://github.com/jdx/mise) all generate shell init code. Instead of running `eval "$(starship init zsh)"` on every shell start, this config caches the output in `~/.cache/zsh/` and sources the file. Run `regen-cache` after upgrading any of these tools.
 
-### Zerobrew + Homebrew
+### Homebrew
 
-[Zerobrew](https://github.com/lucasgelfond/zerobrew) installs CLI tools from homebrew-core 2-20x faster than Homebrew. All 12 tools install through `zb` first, falling back to `brew` if needed. Both coexist: `zb` for speed on CLI tools, `brew` for casks (macOS apps), taps, and services.
+All 12 tools install via [Homebrew](https://brew.sh). Optionally, you can install [Zerobrew](https://github.com/lucasgelfond/zerobrew) for faster CLI tool installs — the PATH is already configured for it.
 
 <a id="works-with"></a>
 ## Works With Other Starters
@@ -135,12 +135,11 @@ This config is designed to pair with two other aismokeshow starters:
 
 The install process makes these changes (Claude asks before each one):
 
-- **Installs [Zerobrew](https://github.com/lucasgelfond/zerobrew)** — fast installer for homebrew-core CLI tools
-- **Installs [Homebrew](https://brew.sh)** if needed — fallback when a tool fails via Zerobrew, or if you provide a Brewfile
+- **Installs [Homebrew](https://brew.sh)** if needed — the macOS package manager
 - **Installs 12 CLI tools** — Starship, Sheldon, fzf, zoxide, eza, bat, ripgrep, fd, Atuin, mise, delta, uv
 - **Configures [Sheldon](https://sheldon.cli.rs)** with 4 plugins — zsh-defer, autosuggestions, history-substring-search, syntax-highlighting
 - **Symlinks `~/.zshrc`** to the modular config in this folder (backs up existing .zshrc)
-- **Writes `~/.zprofile`** with Zerobrew + Homebrew PATH setup (backs up existing)
+- **Writes `~/.zprofile`** with Homebrew PATH setup (backs up existing)
 - **Caches init scripts** in `~/.cache/zsh/` for fast startup
 - **Sets up [mise](https://github.com/jdx/mise)** with Python 3.11 + Node LTS
 
@@ -166,8 +165,8 @@ Target is sub-50ms after caches are generated (run `regen-cache`). First launch 
 **Can I run `/install` multiple times?**
 Yes, it's idempotent. It skips tools that are already installed and only backs up config files on first run.
 
-**Can I still use Homebrew?**
-Yes. Both `brew` and `zb` work side by side. Zerobrew handles homebrew-core CLI tools faster; Homebrew handles casks (macOS apps), taps, `brew bundle`, and `brew services`.
+**Can I use Zerobrew?**
+Yes. Install [Zerobrew](https://github.com/lucasgelfond/zerobrew) separately — the PATH is already configured for it. `zb` installs homebrew-core CLI tools faster; `brew` handles casks (macOS apps), taps, and services.
 
 ## License
 
