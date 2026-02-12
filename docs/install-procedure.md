@@ -398,7 +398,11 @@ After all steps, print this completion message. Use the exact structure and ASCI
 
 > **One last thing.** Open a new terminal window (⌘N) and you'll see a clean new prompt with a `>` character — that's [Starship](https://starship.rs). Everything is working.
 >
+> If you already have terminal windows open, run `exec zsh` in each one to reload your shell config. You don't need to close them — `exec zsh` restarts the shell in place.
+>
 > (You're inside Claude Code right now, so your new config won't load here. Just open a fresh terminal window next to this one to see it.)
+>
+> If Homebrew told you to "run a command to add it to your PATH" — that's already done. Your `.zprofile` has the right config and new terminal windows pick it up automatically.
 
 **Then the VIBE-GUIDE callout:**
 
