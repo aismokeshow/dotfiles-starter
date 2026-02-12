@@ -16,7 +16,7 @@ dotfiles-starter/
 │   ├── starship.toml                      ← Prompt config (symlinked to ~/.config/)
 │   └── sheldon/plugins.toml               ← Plugin manager config (symlinked to ~/.config/sheldon/)
 ├── docs/
-│   └── install-procedure.md               ← 18-step atomic install manifest
+│   └── install-procedure.md               ← 17-step atomic install manifest
 ├── .claude/
 │   ├── CLAUDE.hub.md                      ← THIS FILE — operational reference
 │   ├── agents/

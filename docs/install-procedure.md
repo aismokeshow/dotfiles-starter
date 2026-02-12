@@ -369,9 +369,8 @@ eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null)" || eval "$(/usr/local/bin/
 source ~/.orbstack/shell/init.zsh 2>/dev/null || true
 ```
 
-- **Strategy:** merge — preserve existing user content, add missing blocks
-- **Detect existing:** check for `"CLI tools PATH setup"` marker string
-- **Backup pattern:** `~/.zprofile.pre-dotfiles.YYYYMMDD-HHMMSS`
+- **Mode:** ENSURE-LINES — preserve existing user content, append missing blocks
+- **Marker to check:** `"CLI tools PATH setup"` (if present, lines already exist — skip)
 
 ## Step 14: Verify Default Shell
 

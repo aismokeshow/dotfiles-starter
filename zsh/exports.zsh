@@ -33,7 +33,7 @@ export BUN_INSTALL="$HOME/.bun"
 # Load environment files (separated by security level)
 if [[ -f ~/.env.public ]]; then
     local pub_perms=$(stat -f %A ~/.env.public 2>/dev/null)
-    if [[ "$pub_perms" -gt "644" ]]; then
+    if (( 8#$pub_perms > 8#644 )); then
         echo "WARN: ~/.env.public has loose permissions ($pub_perms) — run: chmod 644 ~/.env.public"
     else
         source ~/.env.public
