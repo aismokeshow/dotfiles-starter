@@ -160,7 +160,18 @@ If this fails (e.g., the cask tap is missing), try adding the tap first:
 ls ~/Library/Fonts/*JetBrains*Nerd* 2>/dev/null || ls /Library/Fonts/*JetBrains*Nerd* 2>/dev/null || echo "not found"
 ```
 
-If the font installed successfully, note this for the post-install message — the user will need to set their terminal font.
+If the font installed successfully, set it as Terminal.app's default font automatically:
+
+```bash
+osascript -l JavaScript -e 'var t = Application("Terminal"); t.defaultSettings.fontName = "JetBrainsMonoNF-Regular"; t.defaultSettings.fontSize = 14;'
+```
+
+Verify it took effect:
+```bash
+osascript -l JavaScript -e 'Application("Terminal").defaultSettings.fontName()'
+```
+
+Must return `JetBrainsMonoNF-Regular`. If it does, the font will apply to all new Terminal.app windows — no manual configuration needed.
 
 If the font install fails entirely, warn the user: "I couldn't install the Nerd Font. Your `ls` will show `?` instead of file icons. You can install it manually later: `brew install --cask font-jetbrains-mono-nerd-font`"
 
@@ -455,10 +466,6 @@ After all steps, print this completion message. Use the exact structure and ASCI
 > **One last thing.** Open a new terminal window (⌘N) and you'll see a clean new prompt with a `>` character — that's [Starship](https://starship.rs). Everything is working.
 >
 > (You're inside Claude Code right now, so your new config won't load here. Just open a fresh terminal window next to this one to see it.)
-
-**Then the font setup instruction (only if the Nerd Font was installed in Step 6):**
-
-> **To see file icons in `ls`:** Open **Terminal → Settings → Profiles → Font → Change**, select **"JetBrainsMono Nerd Font"**, then restart your terminal.
 
 **Then the VIBE-GUIDE callout:**
 
