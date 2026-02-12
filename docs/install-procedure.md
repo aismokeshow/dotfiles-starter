@@ -227,7 +227,7 @@ Skip any tool that is not installed.
 **Goal:** Ensure the custom completions directory exists.
 
 ```bash
-mkdir -p "$HOME/.config/zsh/completions"
+mkdir -p "$HOME/.config/zsh/completions" "$HOME/.zsh/cache"
 ```
 
 ## Step 11: Migrate Custom Config and Symlink .zshrc
