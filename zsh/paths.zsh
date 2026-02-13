@@ -10,9 +10,6 @@ path=(
     $HOME/bin                           # User binaries
     $HOME/scripts                       # Personal scripts
     /usr/local/bin                      # System tools
-    $HOME/.bun/bin                      # Bun
-    /opt/zerobrew/prefix/bin            # Optional: Zerobrew-installed binaries
-    /opt/zerobrew/bin                   # Optional: Zerobrew itself
     /opt/homebrew/bin                   # Homebrew on Apple Silicon (casks, taps, services)
     /opt/homebrew/sbin                  # Homebrew system binaries
     $path                               # Existing system PATH

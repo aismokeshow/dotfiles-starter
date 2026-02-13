@@ -314,20 +314,20 @@ mkdir -p "$HOME/.config/zsh/completions" "$HOME/.zsh/cache"
 Tell the user:
 
 ```
-╔══════════════════════════════════════════════════════════════╗
-║  ⚠️  CONFIRM — This replaces your shell configuration       ║
-╠══════════════════════════════════════════════════════════════╣
-║                                                              ║
-║  I'm going to make your terminal use the new config instead  ║
-║  of the old one. Your old config is saved as a backup.       ║
-║                                                              ║
-║  • Your existing .zshrc will be backed up first              ║
-║  • Any custom aliases, functions, exports, and PATH entries  ║
-║    will be automatically migrated into the new modular files ║
-║  • Nothing will be lost                                      ║
-║                                                              ║
-║  Say "continue" to proceed, or "skip" to leave .zshrc as-is ║
-╚══════════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════════════════════╗
+║  Ready to switch your .zshrc                                         ║
+╠═══════════════════════════════════════════════════════════════════════╣
+║                                                                       ║
+║  Your current ~/.zshrc will be backed up to:                          ║
+║  ~/.zshrc.pre-dotfiles.<timestamp>                                    ║
+║                                                                       ║
+║  Any custom aliases, exports, PATH entries, and functions             ║
+║  get auto-migrated into the new config. Nothing is lost.              ║
+║                                                                       ║
+║  Other tools (AeroSpace, statusline, etc.) are not affected.          ║
+║                                                                       ║
+║  Say "continue" to proceed, or "skip" to leave your .zshrc untouched ║
+╚═══════════════════════════════════════════════════════════════════════╝
 ```
 
 **MANDATORY GATE — Wait for explicit confirmation. Do not proceed without it.**
@@ -396,9 +396,6 @@ If `MISSING`, append the following block to `~/.zprofile`:
 cat >> ~/.zprofile << 'ZPROFILE'
 # CLI tools PATH setup
 [[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
-[[ -d "/opt/zerobrew/bin" ]] && export PATH="/opt/zerobrew/bin:$PATH"
-[[ -d "/opt/zerobrew/prefix/bin" ]] && export PATH="/opt/zerobrew/prefix/bin:$PATH"
-
 # Homebrew shell env (sets HOMEBREW_PREFIX, MANPATH, etc.)
 eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null)" || eval "$(/usr/local/bin/brew shellenv 2>/dev/null)" || true
 
@@ -496,18 +493,7 @@ Tell the user: "CLAUDE.md has been switched to operational mode. Future Claude C
 
 Tell the user:
 
-```
-╔══════════════════════════════════════════════════════════════╗
-║  ⚠️  CONFIRM — This removes git history                      ║
-╠══════════════════════════════════════════════════════════════╣
-║                                                              ║
-║  I can remove git history and packaging files to clean up.   ║
-║  After this, you won't be able to `git pull` updates —       ║
-║  you'd need to re-clone from scratch.                        ║
-║                                                              ║
-║  Say "continue" to clean up, or "skip" to keep git history   ║
-╚══════════════════════════════════════════════════════════════╝
-```
+> **Skip or clean up?** Say "skip" to keep git history (you can `git pull` updates later). Say "continue" to remove git history and packaging files — this is permanent.
 
 **MANDATORY GATE — Wait for explicit confirmation. Default to skip.**
 
@@ -523,7 +509,7 @@ Replace README.md with:
 ```markdown
 # Dotfiles
 
-Your shell config lives here. Open Claude Code in this folder to manage it.
+Your shell config. To manage it: `cd ~/.aismokeshow/dotfiles-starter && claude`
 
 `/customize` · `/install` · `/uninstall`
 
@@ -560,7 +546,6 @@ After all steps, print this completion message. Use the exact structure and ASCI
 >
 > - `atuin register` — sync your shell history across machines (encrypted)
 > - `git config --global user.name "Your Name"` — if not already set
-> - `~/.env.secrets` — put API keys here, then `chmod 600 ~/.env.secrets`
 > - If anything goes wrong, run `/uninstall` to restore your original config
 
 **Then the sign-off:**

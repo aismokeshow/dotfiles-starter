@@ -2,9 +2,6 @@
 # aliases.zsh — All aliases
 # See ALIAS-CHANGES.md for what changed from a typical Oh My Zsh setup
 
-# === Package Managers ===
-# `brew` for packages. Optional: `zb` (Zerobrew) for faster CLI tool installs.
-
 # === Zsh Config ===
 alias zc='${EDITOR:-nano} ~/.zshrc'
 alias zr="source ~/.zshrc && echo 'Zsh config reloaded'"
@@ -30,14 +27,9 @@ alias mv='mv -i'
 
 # === Ports ===
 alias ports='lsof -i -P -n | command grep LISTEN'
-alias killnodes='pkill -f "node_modules/.bin|next-server|next dev|next start|ts-node|tsx" && echo "Force killed Node processes"'
-
-# === Next.js ===
-alias knx="pgrep -f 'next dev|next start|next-server' | xargs kill -9 2>/dev/null; rm -rf .next node_modules/.cache && echo 'Next.js processes killed and cache cleared'"
 
 # === Editors ===
 alias c='${EDITOR:-nano} .'
-
 
 # === Password Generation ===
 alias pw='openssl rand -base64 32 | tr -d "=+/" | cut -c1-32'

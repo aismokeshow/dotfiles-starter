@@ -61,9 +61,6 @@ source ~/.cache/zsh/atuin.zsh 2>/dev/null || eval "$(atuin init zsh)"
 # mise runtime manager (cached init)
 source ~/.cache/zsh/mise.zsh 2>/dev/null || eval "$(mise activate zsh)"
 
-# Bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
-
 # Ghostty shell integration
 if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
     export GHOSTTY_SHELL_INTEGRATION_NO_SUDO=1

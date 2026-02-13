@@ -16,7 +16,7 @@ dotfiles-starter/
 │   ├── starship.toml                      ← Prompt config (symlinked to ~/.config/)
 │   └── sheldon/plugins.toml               ← Plugin manager config (symlinked to ~/.config/sheldon/)
 ├── docs/
-│   └── install-procedure.md               ← 17-step atomic install manifest
+│   └── install-procedure.md               ← 15-step atomic install manifest
 ├── .claude/
 │   ├── CLAUDE.hub.md                      ← THIS FILE — operational reference
 │   ├── agents/
@@ -54,7 +54,6 @@ Modules loaded by `.zshrc`:
 | `checkhealth` | Verify all tools + caches are working |
 | `regen-cache` | Refresh cached init scripts after tool upgrades |
 | `smoke` | Run Claude Code with `--dangerously-skip-permissions` (skips all confirmation prompts) |
-| `zb` | Optional: fast CLI tool installer (homebrew-core). `brew` works normally for casks/taps |
 
 ## Rules for Editing zsh/ Files
 
@@ -71,7 +70,7 @@ Modules loaded by `.zshrc`:
 
 Triggered by: `/install`
 
-If `.installed` exists in this directory, or `~/.zshrc` is already a symlink to this repo and tools are installed, tell the user everything is configured and offer to run `checkhealth`.
+If `.installed` exists in this directory, or `~/.zshrc` is already a symlink to this repo and tools are installed, run `git pull --ff-only 2>/dev/null || true` first, then tell the user everything is up to date (pulled latest) and offer to run `checkhealth`.
 
 Otherwise, the `install-dotfiles` agent handles the full setup. It reads `docs/install-procedure.md` and executes all steps, using the `safe-merge-config` skill for config file changes.
 
@@ -83,4 +82,4 @@ Triggered by: `/uninstall`
 2. Restore backup if it exists: `~/.zshrc.pre-dotfiles.*`
 3. If no backup, create a minimal `~/.zshrc` so the user has a working shell
 4. Remove cached init scripts: `rm -rf ~/.cache/zsh/`
-5. Tools installed via `zb` or `brew` are left in place — the user can remove them manually
+5. Tools installed via `brew` are left in place — the user can remove them manually

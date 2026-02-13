@@ -116,7 +116,7 @@ zsh/
 
 ### Homebrew
 
-All 12 tools install via [Homebrew](https://brew.sh). Optionally, you can install [Zerobrew](https://github.com/lucasgelfond/zerobrew) for faster CLI tool installs — the PATH is already configured for it.
+All 12 tools install via [Homebrew](https://brew.sh).
 
 <a id="works-with"></a>
 ## Works With Other Starters
@@ -162,9 +162,6 @@ Target is sub-50ms after caches are generated (run `regen-cache`). First launch 
 
 **Can I run `/install` multiple times?**
 Yes, it's idempotent. It skips tools that are already installed and only backs up config files on first run.
-
-**Can I use Zerobrew?**
-Yes. Install [Zerobrew](https://github.com/lucasgelfond/zerobrew) separately — the PATH is already configured for it. `zb` installs homebrew-core CLI tools faster; `brew` handles casks (macOS apps), taps, and services.
 
 ## License
 

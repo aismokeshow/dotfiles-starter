@@ -193,7 +193,7 @@ Copy from terminal, paste wherever.
 | Switch Node version | `mise use node@20` |
 | Switch Python version | `mise use python@3.12` |
 | Check what's on a port | `ports` |
-| Kill a port | `killport 3000` |
+| Kill a port | `killport <port>` |
 | Generate a password | `pw` |
 | Check everything works | `checkhealth` |
 | Refresh tool caches | `regen-cache` |

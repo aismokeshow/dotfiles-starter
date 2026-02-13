@@ -112,17 +112,10 @@ checkhealth() {
         echo "MISSING delta"
     fi
     command -v uv &>/dev/null        && echo "OK uv"            || echo "MISSING uv"
-    echo "\nEnvironment:"
-    [[ -f ~/.env.secrets ]] && {
-        local perms=$(stat -f "%A" ~/.env.secrets 2>/dev/null)
-        [[ "$perms" == "600" ]] && echo "OK Secrets secure (600)" || echo "WARN Secrets insecure: $perms"
-    }
     echo "\nInit Caches:"
     for f in starship zoxide fzf atuin mise; do
         [[ -f ~/.cache/zsh/$f.zsh ]] && echo "OK $f cached" || echo "STALE $f (run: regen-cache)"
     done
-    echo "\nPorts:"
-    lsof -i :3000 &>/dev/null && echo "BUSY Port 3000 in use" || echo "OK Port 3000 free"
 }
 
 # --- Yazi (shell cd-on-exit wrapper) ---
