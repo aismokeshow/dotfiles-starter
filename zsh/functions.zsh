@@ -125,6 +125,19 @@ checkhealth() {
     lsof -i :3000 &>/dev/null && echo "BUSY Port 3000 in use" || echo "OK Port 3000 free"
 }
 
+# --- Yazi (shell cd-on-exit wrapper) ---
+# Install: brew install yazi
+if command -v yazi &>/dev/null; then
+    yazi() {
+        local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+        command yazi "$@" --cwd-file="$tmp"
+        if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+            builtin cd -- "$cwd"
+        fi
+        rm -f -- "$tmp"
+    }
+fi
+
 # --- MCP Server Management ---
 
 mcp-info() { claude mcp get "$1"; }

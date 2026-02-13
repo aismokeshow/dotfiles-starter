@@ -201,6 +201,29 @@ Copy from terminal, paste wherever.
 
 ---
 
+## Adding Your Own Aliases
+
+Open `~/.aismokeshow/dotfiles-starter/zsh/aliases.zsh` and add lines at the bottom. For example:
+
+```bash
+alias myproject='cd ~/dev/my-project'
+alias gs='git status'
+```
+
+Save the file, then run `zr` (or `source ~/.zshrc`) to reload. Your aliases are live immediately — no restart needed.
+
+For functions (anything more than a one-liner), add them to `~/.aismokeshow/dotfiles-starter/zsh/functions.zsh` instead.
+
+---
+
+## Don't Delete This Folder
+
+Your `~/.zshrc` is a symlink pointing into this folder. If you delete or move this folder, your shell will break — you'll get a blank prompt with no aliases, no tools, nothing.
+
+If you need to start over, open Claude Code in this folder and run `/uninstall` first. It restores your original config before removing anything.
+
+---
+
 ## Something Broken?
 
 Run `checkhealth`. It tells you exactly what's missing or misconfigured.

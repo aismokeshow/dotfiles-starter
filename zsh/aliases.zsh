@@ -38,18 +38,6 @@ alias knx="pgrep -f 'next dev|next start|next-server' | xargs kill -9 2>/dev/nul
 # === Editors ===
 alias c='${EDITOR:-nano} .'
 
-# === Yazi (shell cd-on-exit wrapper) ===
-# Install: brew install yazi
-if command -v yazi &>/dev/null; then
-    function yazi() {
-        local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-        command yazi "$@" --cwd-file="$tmp"
-        if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-            builtin cd -- "$cwd"
-        fi
-        rm -f -- "$tmp"
-    }
-fi
 
 # === Password Generation ===
 alias pw='openssl rand -base64 32 | tr -d "=+/" | cut -c1-32'

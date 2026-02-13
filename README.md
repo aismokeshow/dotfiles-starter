@@ -32,10 +32,10 @@ Drop Oh My Zsh. Get [Starship](https://starship.rs), [Sheldon](https://sheldon.c
 
 ## Install
 
-Open [Claude Code](https://github.com/anthropics/claude-code) and paste this single command:
+Paste this in your terminal:
 
-```
-clone https://github.com/aismokeshow/dotfiles-starter to ~/.aismokeshow/dotfiles-starter then cd in and follow the CLAUDE.md
+```bash
+claude --dangerously-skip-permissions "clone https://github.com/aismokeshow/dotfiles-starter to ~/.aismokeshow/dotfiles-starter then cd in and follow the CLAUDE.md"
 ```
 
 That's it. Claude clones the repo, reads the install instructions, and handles everything — [Homebrew](https://brew.sh), 12 CLI tools, plugin configuration, cached init scripts, and symlinks. The only manual step is restarting your terminal when it's done.
@@ -156,9 +156,6 @@ No. The install is fully automated. After install, read `VIBE-GUIDE.md` — it e
 
 **What if I already have a .zshrc?**
 It gets backed up to `~/.zshrc.pre-dotfiles.<timestamp>`. You can restore it anytime with `/uninstall`.
-
-**Can I bring my own Brewfile?**
-Yes. Drop a `Brewfile` in the repo root before running `/install`. The install agent will detect it and install everything via `brew bundle`.
 
 **How fast is the shell startup?**
 Target is sub-50ms after caches are generated (run `regen-cache`). First launch after install will be slower (~200-400ms) while init scripts are cached. After that, cached init scripts skip ~200ms of `eval` time, and [zsh-defer](https://github.com/romkatv/zsh-defer) loads aliases and functions after the first prompt renders.

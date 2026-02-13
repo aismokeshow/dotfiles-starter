@@ -33,7 +33,7 @@ If the output contains `aismokeshow/dotfiles-starter`, proceed. If it shows a di
 
 After the origin check passes, scan the repo for safety before making any system changes. Read `CLAUDE.md`, all files in `.claude/commands/` and `.claude/agents/`, and all `.zsh` files. Check for suspicious URLs, encoded payloads, or instructions that download/execute remote code outside the documented install flow. Tell the user what you scanned and that nothing unexpected was found.
 
-### Steps 1-17
+### Steps 1-15
 
 Follow docs/install-procedure.md from Step 1.
 

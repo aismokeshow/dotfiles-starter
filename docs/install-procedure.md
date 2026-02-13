@@ -30,11 +30,26 @@ Record the result: `arm64` (Apple Silicon) or `x86_64` (Intel). This affects Hom
 xcode-select -p 2>/dev/null
 ```
 
-If this fails, tell the user:
+If this fails, print the box below **verbatim** — do NOT paraphrase, summarize, or reformat it:
 
-Tell the user:
-
-> **Your turn** — I can't do this step. Run `xcode-select --install` in a separate terminal, click "Install" on the popup, then come back and say "done".
+```
+╔══════════════════════════════════════════════════════════════╗
+║  🛑  YOUR TURN — Claude can't do this step for you          ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  Your Mac needs Apple's developer tools installed            ║
+║  (just a standard system component, not the full Xcode app). ║
+║                                                              ║
+║  1. Copy and paste this into your terminal, then hit Enter:  ║
+║                                                              ║
+║     xcode-select --install                                   ║
+║                                                              ║
+║  2. A popup will appear — click "Install" and wait           ║
+║  3. Come back here and say "done"                            ║
+║                                                              ║
+║  ⏎ Come back here and say "done" when finished               ║
+╚══════════════════════════════════════════════════════════════╝
+```
 
 **MANDATORY GATE — Do not proceed until the user explicitly confirms. Silence or ambiguous responses are NOT confirmation.**
 
@@ -49,15 +64,30 @@ Check if already installed:
 /opt/homebrew/bin/brew --version 2>/dev/null || /usr/local/bin/brew --version 2>/dev/null || echo "missing"
 ```
 
-If missing, tell the user exactly this (copy-paste friendly, beginner-safe):
+If missing, print the box below **verbatim** — do NOT paraphrase, summarize, or reformat it:
 
-Tell the user:
-
-> **Your turn** — Homebrew needs your password. In a new terminal, run:
-> ```
-> /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-> ```
-> Come back and say "done" when finished.
+```
+╔══════════════════════════════════════════════════════════════╗
+║  🛑  YOUR TURN — Claude can't do this step for you          ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  Homebrew (the macOS package manager) needs your password    ║
+║  to install, and I can't type passwords for you.             ║
+║                                                              ║
+║  1. Open a new terminal window next to this one (⌘N)         ║
+║  2. Copy and paste this entire line, then hit Enter:         ║
+║                                                              ║
+║     /bin/bash -c "$(curl -fsSL                               ║
+║       https://raw.githubusercontent.com/Homebrew/            ║
+║       install/HEAD/install.sh)"                              ║
+║                                                              ║
+║  3. Type your Mac password when asked                        ║
+║     (you won't see it as you type — that's normal)           ║
+║  4. Wait for it to finish (1-3 minutes)                      ║
+║                                                              ║
+║  ⏎ Come back here and say "done" when finished               ║
+╚══════════════════════════════════════════════════════════════╝
+```
 
 **MANDATORY GATE — Do not proceed until the user explicitly confirms. Silence or ambiguous responses are NOT confirmation.**
 
@@ -69,26 +99,7 @@ After Homebrew is confirmed, verify it's reachable:
 
 **Important:** Claude Code's Bash tool does not persist shell state between commands. `eval "$(brew shellenv)"` only affects the current command. For all subsequent `brew` commands in this procedure, **always use the absolute path**: `/opt/homebrew/bin/brew` (Apple Silicon) or `/usr/local/bin/brew` (Intel).
 
-## Step 4: Install Brewfile (if present)
-
-**Precondition:** Step 3 completed (Homebrew available).
-**Goal:** Install user-provided Brewfile packages.
-
-Check for a Brewfile in the starter directory:
-
-```bash
-test -f Brewfile && echo "found" || echo "none"
-```
-
-If found, run:
-
-```bash
-/opt/homebrew/bin/brew bundle install --file=Brewfile --no-lock
-```
-
-If Brewfile is not found, skip this step entirely.
-
-## Step 5: Install CLI Tool Stack
+## Step 4: Install CLI Tool Stack
 
 **Precondition:** Step 3 completed (Homebrew available).
 **Goal:** Install all 12 modern CLI tools via Homebrew.
@@ -122,7 +133,7 @@ Check with: `export PATH="/opt/homebrew/bin:$PATH" && command -v <binary>` for e
 
 Report results to the user. If any failed, list them and note they can be installed manually later with `brew install <pkg>`.
 
-## Step 6: Install Nerd Font (for file icons)
+## Step 5: Install Nerd Font (for file icons)
 
 **Precondition:** Step 3 completed (Homebrew available).
 **Goal:** Install a Nerd Font so `eza --icons` renders file type icons instead of `?` boxes.
@@ -139,7 +150,7 @@ If this fails (e.g., the cask tap is missing), try adding the tap first:
 /opt/homebrew/bin/brew tap homebrew/cask-fonts 2>/dev/null; /opt/homebrew/bin/brew install --cask font-jetbrains-mono-nerd-font 2>&1
 ```
 
-**Verification:** Check the font is installed:
+**VERIFY:** Check the font is installed:
 ```bash
 ls ~/Library/Fonts/*JetBrains*Nerd* 2>/dev/null || ls /Library/Fonts/*JetBrains*Nerd* 2>/dev/null || echo "not found"
 ```
@@ -184,42 +195,42 @@ The font change takes effect in new terminal windows.
 
 If the font install fails entirely, warn the user: "I couldn't install the Nerd Font. Your `ls` will show `?` instead of file icons. You can install it manually later: `brew install --cask font-jetbrains-mono-nerd-font`"
 
-## Step 7: Configure Sheldon (Plugin Manager)
+## Step 6: Configure Sheldon (Plugin Manager)
 
-**Precondition:** Step 5 completed.
+**Precondition:** Step 4 completed.
 **Goal:** Symlink the Sheldon config and download plugins.
 
 
 ```bash
 mkdir -p "$HOME/.config/sheldon"
-ln -sf "$(pwd)/zsh/sheldon/plugins.toml" "$HOME/.config/sheldon/plugins.toml"
+ln -sfn "$(pwd)/zsh/sheldon/plugins.toml" "$HOME/.config/sheldon/plugins.toml"
 ```
 
 If `sheldon` is installed, lock plugins:
 
 ```bash
-sheldon lock 2>&1
+export PATH="/opt/homebrew/bin:$PATH" && sheldon lock 2>&1
 ```
 
 If `sheldon lock` fails, warn: "Plugins will download on first shell start."
 
-**Verification:** `~/.config/sheldon/plugins.toml` exists and is a symlink.
+**VERIFY:** `~/.config/sheldon/plugins.toml` exists and is a symlink: `readlink ~/.config/sheldon/plugins.toml`
 
-## Step 8: Configure Starship Prompt
+## Step 7: Configure Starship Prompt
 
-**Precondition:** Step 5 completed.
+**Precondition:** Step 4 completed.
 **Goal:** Symlink the Starship config.
 
 ```bash
 mkdir -p "$HOME/.config"
-ln -sf "$(pwd)/zsh/starship.toml" "$HOME/.config/starship.toml"
+ln -sfn "$(pwd)/zsh/starship.toml" "$HOME/.config/starship.toml"
 ```
 
-**Verification:** `~/.config/starship.toml` exists and is a symlink.
+**VERIFY:** `readlink ~/.config/starship.toml` shows a path ending in `zsh/starship.toml`.
 
-## Step 9: Configure mise (Runtime Version Manager)
+## Step 8: Configure mise (Runtime Version Manager)
 
-**Precondition:** Step 5 completed.
+**Precondition:** Step 4 completed.
 **Goal:** Create a default mise config and install runtimes.
 
 ```bash
@@ -240,14 +251,14 @@ experimental = true
 If `mise` is installed, install runtimes:
 
 ```bash
-mise install 2>&1
+export PATH="/opt/homebrew/bin:$PATH" && mise install 2>&1
 ```
 
 This may take several minutes. If it fails, warn: "Run `mise install` manually after shell restart."
 
-## Step 10: Cache Shell Init Scripts
+## Step 9: Cache Shell Init Scripts
 
-**Precondition:** Steps 5-8 completed.
+**Precondition:** Steps 4-7 completed.
 **Goal:** Pre-cache init scripts so .zshrc loads from cache instead of running `eval` on every startup.
 
 ```bash
@@ -258,25 +269,25 @@ For each tool that is installed, generate its cache file:
 
 | Tool | Command | Output File |
 |------|---------|------------|
-| starship | `starship init zsh` | `~/.cache/zsh/starship.zsh` |
-| zoxide | `zoxide init zsh` | `~/.cache/zsh/zoxide.zsh` |
-| fzf | `fzf --zsh` | `~/.cache/zsh/fzf.zsh` |
-| atuin | `atuin init zsh` | `~/.cache/zsh/atuin.zsh` |
-| mise | `mise activate zsh` | `~/.cache/zsh/mise.zsh` |
+| starship | `export PATH="/opt/homebrew/bin:$PATH" && starship init zsh` | `~/.cache/zsh/starship.zsh` |
+| zoxide | `export PATH="/opt/homebrew/bin:$PATH" && zoxide init zsh` | `~/.cache/zsh/zoxide.zsh` |
+| fzf | `export PATH="/opt/homebrew/bin:$PATH" && fzf --zsh` | `~/.cache/zsh/fzf.zsh` |
+| atuin | `export PATH="/opt/homebrew/bin:$PATH" && atuin init zsh` | `~/.cache/zsh/atuin.zsh` |
+| mise | `export PATH="/opt/homebrew/bin:$PATH" && mise activate zsh` | `~/.cache/zsh/mise.zsh` |
 
 Skip any tool that is not installed.
 
-**Verification:** `ls ~/.cache/zsh/` shows `.zsh` files for each installed tool.
+**VERIFY:** `ls ~/.cache/zsh/` shows `.zsh` files for each installed tool.
 
-## Step 10b: Configure Git to Use Delta
+## Step 9b: Configure Git to Use Delta
 
-**Precondition:** Step 5 completed (delta installed).
+**Precondition:** Step 4 completed (delta installed).
 **Goal:** Wire up delta as git's diff pager.
 
 Only run if delta is installed and git's pager is not already configured:
 
 ```bash
-if command -v delta &>/dev/null && [[ -z "$(git config --global core.pager)" ]]; then
+if export PATH="/opt/homebrew/bin:$PATH" && command -v delta &>/dev/null && [[ -z "$(git config --global core.pager)" ]]; then
     git config --global core.pager delta
     git config --global interactive.diffFilter 'delta --color-only'
     git config --global delta.navigate true
@@ -286,9 +297,9 @@ if command -v delta &>/dev/null && [[ -z "$(git config --global core.pager)" ]];
 fi
 ```
 
-**Verification:** `git config --global core.pager` returns `delta`.
+**VERIFY:** `git config --global core.pager` returns `delta`.
 
-## Step 11: Set Up Completions Directory
+## Step 10: Set Up Completions Directory
 
 **Precondition:** None.
 **Goal:** Ensure the custom completions directory exists.
@@ -297,16 +308,33 @@ fi
 mkdir -p "$HOME/.config/zsh/completions" "$HOME/.zsh/cache"
 ```
 
-## Step 12: Migrate Custom Config and Symlink .zshrc
+## Step 11: Migrate Custom Config and Symlink .zshrc
 
-**Precondition:** Step 11 completed.
+**Precondition:** Step 10 completed.
 **Goal:** Preserve any custom shell configuration, then replace `~/.zshrc` with a symlink to this repo's modular config.
 
-> **DESTRUCTIVE BOUNDARY** — This replaces the user's shell configuration.
-> Tell the user: "I'm about to replace your `~/.zshrc` with a symlink to this starter's modular config. Your existing `.zshrc` will be backed up, and I'll automatically preserve any custom aliases, functions, exports, or PATH entries I find in it. Proceed?"
-> **Wait for explicit confirmation.**
+Tell the user:
 
-### Step 12a: Extract custom content from existing .zshrc
+```
+╔══════════════════════════════════════════════════════════════╗
+║  ⚠️  CONFIRM — This replaces your shell configuration       ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  I'm going to make your terminal use the new config instead  ║
+║  of the old one. Your old config is saved as a backup.       ║
+║                                                              ║
+║  • Your existing .zshrc will be backed up first              ║
+║  • Any custom aliases, functions, exports, and PATH entries  ║
+║    will be automatically migrated into the new modular files ║
+║  • Nothing will be lost                                      ║
+║                                                              ║
+║  Say "continue" to proceed, or "skip" to leave .zshrc as-is ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+**MANDATORY GATE — Wait for explicit confirmation. Do not proceed without it.**
+
+### Step 11a: Extract custom content from existing .zshrc
 
 Read `~/.zshrc`. If it exists and is not empty, compare its contents against `zsh/.zshrc` (the new config). Identify any lines that are custom — aliases, functions, export statements, PATH additions, or source commands that are NOT part of the new modular config.
 
@@ -324,13 +352,19 @@ Tell the user what was migrated: "I found X custom lines in your existing .zshrc
 
 If nothing custom is found, skip this substep silently.
 
-### Step 12b: Backup and symlink
+### Step 11b: Backup and symlink
 
-Use the **safe-merge-config** skill with:
-- **Target file:** `~/.zshrc`
-- **Source:** `$(pwd)/zsh/.zshrc`
-- **Strategy:** symlink
-- **Backup pattern:** `~/.zshrc.pre-dotfiles.YYYYMMDD-HHMMSS`
+Back up the existing file (if any):
+
+```bash
+[[ -f ~/.zshrc ]] && cp ~/.zshrc ~/.zshrc.pre-dotfiles.$(date +%Y%m%d-%H%M%S)
+```
+
+Create the symlink:
+
+```bash
+ln -sfn "$(pwd)/zsh/.zshrc" ~/.zshrc
+```
 
 **CRITICAL: This MUST be a symlink, not a copy.** The modular config uses `${0:A:h}` to resolve its directory via the symlink. If `.zshrc` is copied instead of symlinked, every `source` call will fail. Do NOT use `cp`, `Write`, or any other method — only `ln -sfn`.
 
@@ -345,18 +379,23 @@ ln -sfn "$(pwd)/zsh/.zshrc" ~/.zshrc
 
 After symlinking, inform the user:
 
-> `~/.zshrc` is now a symlink to this folder. **Do not move or delete this folder** — your shell config lives here permanently.
+> `~/.zshrc` is now a symlink pointing into this folder. If you move or delete `~/.aismokeshow/dotfiles-starter/`, your shell will fall back to the macOS default config until you fix the link.
 
-## Step 13: Write .zprofile
+## Step 12: Write .zprofile
 
-**Precondition:** Step 12 completed.
+**Precondition:** Step 11 completed.
 **Goal:** Ensure `~/.zprofile` sets up PATH for Homebrew and OrbStack.
 
-Use the **safe-merge-config** skill with:
-- **Target file:** `~/.zprofile`
-- **Content to ensure is present:**
+Check if the CLI tools PATH block already exists:
 
 ```bash
+grep -q "CLI tools PATH setup" ~/.zprofile 2>/dev/null && echo "EXISTS" || echo "MISSING"
+```
+
+If `MISSING`, append the following block to `~/.zprofile`:
+
+```bash
+cat >> ~/.zprofile << 'ZPROFILE'
 # CLI tools PATH setup
 [[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
 [[ -d "/opt/zerobrew/bin" ]] && export PATH="/opt/zerobrew/bin:$PATH"
@@ -367,15 +406,17 @@ eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null)" || eval "$(/usr/local/bin/
 
 # OrbStack Docker integration (optional — only loads if installed)
 source ~/.orbstack/shell/init.zsh 2>/dev/null || true
+ZPROFILE
 ```
 
-- **Mode:** ENSURE-LINES — preserve existing user content, append missing blocks
-- **Marker to check:** `"CLI tools PATH setup"` (if present, lines already exist — skip)
+If `EXISTS`, skip — the block is already present.
 
-## Step 14: Verify Default Shell
+## Step 13: Validate Installation
 
-**Precondition:** Step 13 completed.
-**Goal:** Ensure the user's login shell is zsh.
+**Precondition:** All previous steps completed.
+**Goal:** Confirm the default shell is zsh, symlinks are correct, and all tools are available.
+
+First, check the default shell:
 
 ```bash
 echo "$SHELL"
@@ -387,12 +428,7 @@ If the output does not end in `/zsh`, tell the user:
 
 This is informational only — do not run `chsh` automatically.
 
-## Step 15: Validate Installation
-
-**Precondition:** All previous steps completed.
-**Goal:** Confirm symlinks are correct and all tools are available.
-
-**First, verify the .zshrc symlink** — this is the most critical check. If .zshrc was copied instead of symlinked, the entire modular config breaks:
+**Then verify the .zshrc symlink** — this is the most critical check. If .zshrc was copied instead of symlinked, the entire modular config breaks:
 
 ```bash
 readlink ~/.zshrc
@@ -427,7 +463,7 @@ readlink ~/.config/sheldon/plugins.toml
 | `delta` |
 | `uv` |
 
-For each, run `command -v <binary>`. Report OK or MISSING.
+For each, run `export PATH="/opt/homebrew/bin:$PATH" && command -v <binary>`. Report OK or MISSING.
 
 If any are missing, tell the user: "X tools not found. Run `brew install <pkg>` to install them manually."
 
@@ -438,16 +474,16 @@ source ~/.zshrc
 checkhealth
 ```
 
-## Step 16: Switch to Operational Mode
+## Step 14: Switch to Operational Mode
 
-**Precondition:** Step 15 passed (or user acknowledged missing tools).
+**Precondition:** Step 13 passed (or user acknowledged missing tools).
 **Goal:** Replace the install-phase CLAUDE.md with the operational hub version.
 
 ```bash
 cp .claude/CLAUDE.hub.md CLAUDE.md
 ```
 
-Write a marker file so future agents can detect this is an active install (even if `.git` was removed in Step 17):
+Write a marker file so future agents can detect this is an active install (even if `.git` was removed in Step 15):
 
 ```bash
 date -u '+%Y-%m-%dT%H:%M:%SZ' > .installed
@@ -455,14 +491,27 @@ date -u '+%Y-%m-%dT%H:%M:%SZ' > .installed
 
 Tell the user: "CLAUDE.md has been switched to operational mode. Future Claude Code sessions in this folder will see the hub instructions instead of the install flow."
 
-## Step 17: Optional Cleanup
+## Step 15: Optional Cleanup
 
-**Precondition:** Step 16 completed.
+**Precondition:** Step 14 completed.
 **Goal:** Remove packaging artifacts if the user wants a clean install.
 
-> **DESTRUCTIVE BOUNDARY** — This removes git history and the ability to pull updates.
-> Tell the user: "I can remove git history and packaging files to clean up. You won't be able to `git pull` updates afterward. Say 'continue' to clean up, or 'skip' to keep the ability to pull updates."
-> **Wait for explicit confirmation. Default to skip.**
+Tell the user:
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║  ⚠️  CONFIRM — This removes git history                      ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  I can remove git history and packaging files to clean up.   ║
+║  After this, you won't be able to `git pull` updates —       ║
+║  you'd need to re-clone from scratch.                        ║
+║                                                              ║
+║  Say "continue" to clean up, or "skip" to keep git history   ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+**MANDATORY GATE — Wait for explicit confirmation. Default to skip.**
 
 If the user says continue:
 
@@ -514,9 +563,10 @@ After all steps, print this completion message. Use the exact structure and ASCI
 > - `atuin register` — sync your shell history across machines (encrypted)
 > - `git config --global user.name "Your Name"` — if not already set
 > - `~/.env.secrets` — put API keys here, then `chmod 600 ~/.env.secrets`
+> - If anything goes wrong, run `/uninstall` to restore your original config
 
-**Then the branded sign-off (print this ASCII art exactly):**
+**Then the sign-off:**
 
-Print: "You're all set. Welcome to the 2026 shell. 🔥"
-
-**Important:** `~/.zshrc` is now a symlink to this folder. Don't move or delete it — your shell config lives here permanently.
+> You're all set. Welcome to the 2026 shell.
+>
+> **How this works:** `~/.zshrc` is a symlink → `~/.aismokeshow/dotfiles-starter/zsh/.zshrc`. All your shell config lives in this folder. Move or delete it and your shell falls back to macOS defaults until you relink. To undo everything cleanly, run `/uninstall`.
