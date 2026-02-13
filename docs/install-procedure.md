@@ -67,26 +67,24 @@ Check if already installed:
 If missing, print the box below **verbatim** — do NOT paraphrase, summarize, or reformat it:
 
 ```
-╔══════════════════════════════════════════════════════════════╗
-║  🛑  YOUR TURN — Claude can't do this step for you          ║
-╠══════════════════════════════════════════════════════════════╣
-║                                                              ║
-║  Homebrew (the macOS package manager) needs your password    ║
-║  to install, and I can't type passwords for you.             ║
-║                                                              ║
-║  1. Open a new terminal window next to this one (⌘N)         ║
-║  2. Copy and paste this entire line, then hit Enter:         ║
-║                                                              ║
-║     /bin/bash -c "$(curl -fsSL                               ║
-║       https://raw.githubusercontent.com/Homebrew/            ║
-║       install/HEAD/install.sh)"                              ║
-║                                                              ║
-║  3. Type your Mac password when asked                        ║
-║     (you won't see it as you type — that's normal)           ║
-║  4. Wait for it to finish (1-3 minutes)                      ║
-║                                                              ║
-║  ⏎ Come back here and say "done" when finished               ║
-╚══════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║  🛑  YOUR TURN — Claude can't do this step for you                                                   ║
+╠══════════════════════════════════════════════════════════════════════════════════════════════════════╣
+║                                                                                                      ║
+║  Homebrew (the macOS package manager) needs your password to install,                                ║
+║  and I can't type passwords for you.                                                                 ║
+║                                                                                                      ║
+║  1. Open a new terminal window next to this one (⌘N)                                                 ║
+║  2. Copy and paste this entire line, then hit Enter:                                                 ║
+║                                                                                                      ║
+║     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"  ║
+║                                                                                                      ║
+║  3. Type your Mac password when asked                                                                ║
+║     (you won't see it as you type — that's normal)                                                   ║
+║  4. Wait for it to finish (1-3 minutes)                                                              ║
+║                                                                                                      ║
+║  ⏎ Come back here and say "done" when finished                                                       ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
 ```
 
 **MANDATORY GATE — Do not proceed until the user explicitly confirms. Silence or ambiguous responses are NOT confirmation.**
