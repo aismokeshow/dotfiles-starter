@@ -20,6 +20,16 @@ test -f .installed && echo "INSTALLED" || echo "NEW"
 
 **If INSTALLED:** This config is already set up. Do NOT re-clone or delete this directory — `~/.zshrc` is symlinked here. Instead, tell the user: "This is already installed (since `<date from .installed>`). Run `checkhealth` in a terminal to verify, or `/customize` to make changes." Stop here.
 
+### Step 0a: Pull Latest
+
+If the directory has a `.git` folder, pull to ensure you're working with the latest code:
+
+```bash
+git pull --ff-only 2>/dev/null || true
+```
+
+This handles the common case where the user tried installing before but didn't finish — the directory exists with stale code. The `--ff-only` flag prevents merge conflicts; `|| true` ensures it doesn't block if offline or on a detached HEAD.
+
 ### Step 0b: Verify Repo Origin
 
 Check that this repo was cloned from the official source:
